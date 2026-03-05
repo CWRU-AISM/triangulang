@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="TrianguLang: [Paper description here].">
+  <meta name="keywords" content="TrianguLang, [keywords here]">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TrianguLang</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <style>
+    :root {
+      --primary: #1e293b;
+      --accent: #c0392b;
+      --text-mid: #475569;
+      --text-light: #94a3b8;
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--primary);
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2d3748 100%);
+      color: white;
+    }
+
+    .section-title {
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-alt {
+      background: #f1f5f9;
+    }
+
+    .figure-placeholder {
+      background: #e2e8f0;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin: 1.5rem 0;
+    }
+
+    .figure-caption {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      margin-top: 0.75rem;
+      line-height: 1.6;
+    }
+
+    .content-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .reference-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .reference-item:last-child {
+      border-bottom: none;
+    }
+
+    .footer-custom {
+      background: var(--primary);
+      color: rgba(255,255,255,0.6);
+      padding: 2.5rem 1.5rem;
+    }
+
+    .footer-custom a {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .footer-custom a:hover {
+      color: white;
+    }
+
+    .navbar {
+      background: rgba(15, 23, 42, 0.97);
+      backdrop-filter: blur(8px);
+    }
+
+    .navbar-item, .navbar-item a {
+      color: rgba(255,255,255,0.8) !important;
+    }
+
+    .navbar-item:hover {
+      background: rgba(255,255,255,0.08) !important;
+      color: white !important;
+    }
+
+    .publication-links .button {
+      margin: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#" style="font-weight: 700; font-size: 1.1rem; color: white !important;">
+        TrianguLang
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="mainNavbar" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="#section1">Section 1</a>
+        <a class="navbar-item" href="#section2">Section 2</a>
+        <a class="navbar-item" href="#references">References</a>
+        <a class="navbar-item" href="#acknowledgements">Acknowledgements</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO / TITLE & LINKS ===== -->
+<section class="hero is-large hero-gradient" style="padding-top: 52px;">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-1" style="color: white; font-weight: 800; margin-bottom: 1rem;">
+            TrianguLang
+          </h1>
+          <h2 class="subtitle is-4" style="color: rgba(255,255,255,0.75); font-weight: 400; margin-bottom: 2rem;">
+            Geometry-Aware Semantic Consensus for Pose-Free 3D Localization
+          </h2>
+
+          <!-- Authors -->
+          <div class="is-size-5" style="margin-bottom: 0.5rem; color: rgba(255,255,255,0.9);">
+            <span style="margin: 0 0.4rem;">
+              <a href="#" style="color: rgba(255,255,255,0.9);">Bryce Grant</a><sup>1</sup>,
+            </span>
+            <span style="margin: 0 0.4rem;">
+              <a href="#" style="color: rgba(255,255,255,0.9);">Aryeh Rothenberg</a><sup>1</sup>,
+            </span>
+            <span style="margin: 0 0.4rem;">
+              <a href="#" style="color: rgba(255,255,255,0.9);">Atri Banerjee</a><sup>1</sup>,
+            </span>
+            <span style="margin: 0 0.4rem;">
+              <a href="#" style="color: rgba(255,255,255,0.9);">Peng Wang</a><sup>1</sup>
+            </span>
+          </div>
+          <div class="is-size-6" style="color: rgba(255,255,255,0.55); margin-bottom: 2rem;">
+            <sup>1</sup>Case Western Reserve University
+          </div>
+
+          <!-- Links -->
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="#" class="button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#" class="button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#" class="button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 1 ===== -->
+<section class="section" id="section1">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Section 1</h2>
+
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+          <p>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagram placeholders -->
+    <div class="columns" style="margin-top: 2rem;">
+      <div class="column is-half">
+        <div class="figure-placeholder">
+          [ Figure 1 placeholder ]
+        </div>
+        <p class="figure-caption has-text-centered">
+          <strong>Figure 1.</strong> Caption for figure 1.
+        </p>
+      </div>
+      <div class="column is-half">
+        <div class="figure-placeholder">
+          [ Figure 2 placeholder ]
+        </div>
+        <p class="figure-caption has-text-centered">
+          <strong>Figure 2.</strong> Caption for figure 2.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SECTION 2 ===== -->
+<section class="section section-alt" id="section2">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Section 2</h2>
+
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+          </p>
+          <p>
+            Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagram placeholders -->
+    <div class="columns" style="margin-top: 2rem;">
+      <div class="column is-one-third">
+        <div class="figure-placeholder">
+          [ Figure 3 placeholder ]
+        </div>
+        <p class="figure-caption has-text-centered">
+          <strong>Figure 3.</strong> Caption for figure 3.
+        </p>
+      </div>
+      <div class="column is-one-third">
+        <div class="figure-placeholder">
+          [ Figure 4 placeholder ]
+        </div>
+        <p class="figure-caption has-text-centered">
+          <strong>Figure 4.</strong> Caption for figure 4.
+        </p>
+      </div>
+      <div class="column is-one-third">
+        <div class="figure-placeholder">
+          [ Figure 5 placeholder ]
+        </div>
+        <p class="figure-caption has-text-centered">
+          <strong>Figure 5.</strong> Caption for figure 5.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== REFERENCES ===== -->
+<section class="section" id="references">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">References</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content-card">
+          <div class="reference-item">
+            [1] Author A, Author B. "Paper Title." <em>Conference/Journal</em>, Year.
+          </div>
+          <div class="reference-item">
+            [2] Author C, Author D. "Another Paper Title." <em>Conference/Journal</em>, Year.
+          </div>
+          <div class="reference-item">
+            [3] Author E et al. "Yet Another Paper Title." <em>Conference/Journal</em>, Year.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACKNOWLEDGEMENTS ===== -->
+<section class="section section-alt" id="acknowledgements">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Acknowledgements</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified" style="font-size: 1.0rem; line-height: 1.8; color: var(--text-mid);">
+          <p>
+            We would like to thank NVIDIA and NSF for their support, without which this research would not have been possible. 
+            <!-- Add more? -->
+          </p>
+          <p style="font-size: 0.88rem; color: var(--text-light);">
+            Website template adapted from <a href="https://nerfies.github.io" target="_blank">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-custom">
+  <div class="container is-max-desktop">
+    <div class="columns">
+      <div class="column is-half">
+        <p style="font-weight: 600; color: white; margin-bottom: 0.5rem;">TrianguLang</p>
+        <p style="font-size: 0.9rem;">[Institution Name]</p>
+      </div>
+      <div class="column is-half has-text-right">
+        <a href="#" style="margin-right: 1rem;">Paper</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script defer src="./static/js/fontawesome.all.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    $navbarBurgers.forEach(el => {
+      el.addEventListener('click', () => {
+        const $target = document.getElementById(el.dataset.target);
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
