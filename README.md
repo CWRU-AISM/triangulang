@@ -10,4 +10,4 @@ This is a project page that displays some information about TrianguLang: Geometr
 
 ## Credits
 
-Website template structure inspired by "Not All Features are Creaetd Equal", which was in turn inspired by [Nerfies](https://nerfies.github.io/).
+Website template structure inspired by "Not All Features are Created Equal", which was in turn inspired by [Nerfies](https://nerfies.github.io/).
