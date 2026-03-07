@@ -64,6 +64,18 @@
       line-height: 1.6;
     }
 
+    .figure-constrained {
+      max-width: 800px; /* Limits the width on large screens */
+      margin-left: auto; /* Pushes the image to the center */
+      margin-right: auto; /* Pushes the image to the center */
+      margin-bottom: 4rem; /* Keeps the spacing between figures */
+    }
+
+    /* Removes the bottom margin from the last figure in a section */
+    .figure-constrained:last-child {
+      margin-bottom: 0; 
+    }
+
     .content-card {
       background: white;
       border-radius: 12px;
@@ -231,28 +243,31 @@
 
 <!-- ===== Arch and Decoder Diagrams ===== -->
 
-    <div class="columns" style="margin-top: 2rem;">
-      <div class="column is-half">
-        <img src="static/images/architecture.png" alt="Description of Figure 1" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-        <p class="figure-caption has-text-centered">
-          <strong>Figure 1.</strong> Overview of the TrianguLang architecture.
-        </p>
-      </div>
-      <div class="column is-half">
-        <img src="static/images/decoder.png" alt="Description of Figure 2" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-        <p class="figure-caption has-text-centered">
-          <strong>Figure 2.</strong> Overview of the GASA decoder.
-        </p>
+   <div class="columns is-centered" style="margin-top: 2rem;">
+      <div class="column is-four-fifths">
+        
+        <div class="figure-constrained">
+          <img src="static/images/architecture.png" alt="Overview of the TrianguLang architecture" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 1.</strong> Overview of the TrianguLang architecture.
+          </p>
+        </div>
+
+        <div class="figure-constrained">
+          <img src="static/images/decoder.png" alt="Overview of the GASA decoder" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 2.</strong> Overview of the GASA decoder.
+          </p>
+        </div>
+
       </div>
     </div>
-
-  </div>
 </section>
 
-<!-- ===== SECTION 2 ===== -->
+<!-- ===== Section 2 ===== -->
 <section class="section section-alt" id="section2">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Section 2</h2>
+    <h2 class="title is-3 section-title has-text-centered">Qualitative Results</h2>
 
     <div class="columns is-centered">
       <div class="column is-four-fifths">
@@ -271,38 +286,36 @@
       </div>
     </div>
 
-    <!-- Results -->
-    <div class="columns" style="margin-top: 2rem;">
+    <!-- Results Grids-->
+    <div class="columns is-centered" style="margin-top: 2rem;">
+      <div class="column is-four-fifths">
 
-      <div class="column is-one-third">
-        <img src="static/images/grid_scannet.png" alt="Description of Figure 3" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-        <p class="figure-caption has-text-centered">
-          <strong>Figure 3.</strong> Segmentation results on the ScanNet++ dataset.
-        </p>
-      </div>
-
-      <div class="column is-one-third">
-        <img src="static/images/benchmarking_grid.png" alt="Description of Figure 4" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-        <p class="figure-caption has-text-centered">
-          <strong>Figure 4.</strong> Qualitative comparison of results on the LERF_OVS dataset.
-        </p>
-      </div>
-
-      <div class="column is-one-third">
-        <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft);">
-
-          <img src="./static/images/nvos1.png" alt="Top half of Figure 5" style="width: 100%; height: auto; display: block;">
-          <img src="./static/images/nvos2.png" alt="Bottom half of Figure 5" style="width: 100%; height: auto; display: block;">
-        
+        <div class="figure-constrained">
+          <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 3.</strong> Segmentation results on the ScanNet++ dataset.
+          </p>
         </div>
-        <p class="figure-caption has-text-centered">
-          <strong>Figure 5.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
-        </p>
+
+        <div class="figure-constrained">
+          <img src="static/images/benchmarking_grid.png" alt="Qualitative comparison on LERF_OVS" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 4.</strong> Qualitative comparison of results on the LERF_OVS dataset.
+          </p>
+        </div>
+
+        <div class="figure-constrained">
+          <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft);">
+            <img src="./static/images/nvos1.png" alt="Top half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
+            <img src="./static/images/nvos2.png" alt="Bottom half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
+          </div>
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 5.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
+          </p>
+        </div>
+
       </div>
-
     </div>
-
-  </div>
 </section>
 
 <!-- ===== REFERENCES ===== -->
@@ -312,15 +325,14 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content-card">
+
           <div class="reference-item">
-            [1] Author A, Author B. "Paper Title." <em>Conference/Journal</em>, Year.
+            [1] Carion, N. et al.: "Sam 3: Segment Anything with Concepts." 2025.
           </div>
           <div class="reference-item">
-            [2] Author C, Author D. "Another Paper Title." <em>Conference/Journal</em>, Year.
+            [2] Lin, H., Chen, S., Liew, J., Chen, D.Y., Li, Z., Shi, G., Feng, J., Kang, B.: "Depth Anything 3: Recovering the Visual Space from Any Views." 2025.
           </div>
-          <div class="reference-item">
-            [3] Author E et al. "Yet Another Paper Title." <em>Conference/Journal</em>, Year.
-          </div>
+
         </div>
       </div>
     </div>
