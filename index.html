@@ -133,7 +133,7 @@
     </div>
     <div id="mainNavbar" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="#section1">Section 1</a>
+        <a class="navbar-item" href="#section1">Abstract</a>
         <a class="navbar-item" href="#section2">Section 2</a>
         <a class="navbar-item" href="#references">References</a>
         <a class="navbar-item" href="#acknowledgements">Acknowledgements</a>
@@ -206,16 +206,22 @@
 <!-- ===== SECTION 1 ===== -->
 <section class="section" id="section1">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Section 1</h2>
+    <h2 class="title is-3 section-title has-text-centered">Abstract</h2>
 
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Localizing objects and parts from natural language in 3D space is essential for robotics, AR, and embodied AI,
+            yet existing methods face a trade-off between the accuracy and geometric consistency of per-scene optimization and the efficiency of feed-forward inference.
+            We present TrianguLang, a feed-forward framework for 3D localization that requires no camera calibration at inference.
+            Unlike prior methods that treat views independently, we introduce Geometry-Aware Semantic Attention (GASA), which utilizes predicted geometry to gate cross-view feature correspondence,
+            suppressing semantically plausible but geometrically inconsistent matches without requiring ground-truth poses.
+            Validated on five benchmarks including ScanNet++ and uCO3D, TrianguLang achieves state-of-the-art feed-forward text-guided segmentation and localization,
+            reducing user effort from <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>N</mi><mo>)</mo></math> 
+            clicks to a single text query. The model processes each frame in <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>&sim;</mo></math>107ms
+            (<math xmlns="http://www.w3.org/1998/Math/MathML"><mo>&sim;</mo></math>9 FPS) without optimization,
+            enabling practical deployment for interactive robotics and AR applications.
           </p>
         </div>
       </div>
