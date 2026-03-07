@@ -227,22 +227,21 @@
       </div>
     </div>
 
-    <!-- Diagram placeholders -->
+
+
+<!-- ===== Arch and Decoder Diagrams ===== -->
+
     <div class="columns" style="margin-top: 2rem;">
       <div class="column is-half">
-        <div class="figure-placeholder">
-          [ Figure 1 placeholder ]
-        </div>
+        <img src="static/images/architecture.png" alt="Description of Figure 1" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
         <p class="figure-caption has-text-centered">
-          <strong>Figure 1.</strong> Caption for figure 1.
+          <strong>Figure 1.</strong> Overview of the TrianguLang architecture.
         </p>
       </div>
       <div class="column is-half">
-        <div class="figure-placeholder">
-          [ Figure 2 placeholder ]
-        </div>
+        <img src="static/images/decoder.png" alt="Description of Figure 2" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
         <p class="figure-caption has-text-centered">
-          <strong>Figure 2.</strong> Caption for figure 2.
+          <strong>Figure 2.</strong> Overview of the GASA decoder.
         </p>
       </div>
     </div>
@@ -259,41 +258,48 @@
       <div class="column is-four-fifths">
         <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+            TrianguLang uses predicted geometry from DA3-NESTED to jointly estimate metric depth and camera intrinsics/extrinsics from the input images alone,
+            enabling deployment on uncalibrated camera systems and multi-camera setups without requiring SLAM or structure-from-motion (SfM) preprocessing.
           </p>
           <p>
-            Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.
+            TrianguLang operates in a single-prompt setting: the language query is provided
+            once and propagated across all views through geometric reasoning, reducing user
+            effort from <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>N</mi><mo>)</mo></math>
+            clicks to <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>1</mi><mo>)</mo></math> text input.
           </p>
         </div>
       </div>
     </div>
 
-    <!-- Diagram placeholders -->
+    <!-- Results -->
     <div class="columns" style="margin-top: 2rem;">
+
       <div class="column is-one-third">
-        <div class="figure-placeholder">
-          [ Figure 3 placeholder ]
-        </div>
+        <img src="static/images/grid_scannet.png" alt="Description of Figure 3" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
         <p class="figure-caption has-text-centered">
-          <strong>Figure 3.</strong> Caption for figure 3.
+          <strong>Figure 3.</strong> Segmentation results on the ScanNet++ dataset.
         </p>
       </div>
+
       <div class="column is-one-third">
-        <div class="figure-placeholder">
-          [ Figure 4 placeholder ]
-        </div>
+        <img src="static/images/benchmarking_grid.png" alt="Description of Figure 4" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
         <p class="figure-caption has-text-centered">
-          <strong>Figure 4.</strong> Caption for figure 4.
+          <strong>Figure 4.</strong> Qualitative comparison of results on the LERF_OVS dataset.
         </p>
       </div>
+
       <div class="column is-one-third">
-        <div class="figure-placeholder">
-          [ Figure 5 placeholder ]
+        <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft);">
+
+          <img src="./static/images/nvos1.png" alt="Top half of Figure 5" style="width: 100%; height: auto; display: block;">
+          <img src="./static/images/nvos2.png" alt="Bottom half of Figure 5" style="width: 100%; height: auto; display: block;">
+        
         </div>
         <p class="figure-caption has-text-centered">
-          <strong>Figure 5.</strong> Caption for figure 5.
+          <strong>Figure 5.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
         </p>
       </div>
+
     </div>
 
   </div>
