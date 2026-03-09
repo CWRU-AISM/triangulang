@@ -124,8 +124,9 @@
     }
 
     .citation-block {
-      background: #1e293b;
-      color: #e2e8f0;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 1.25rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
@@ -139,9 +140,9 @@
       position: absolute;
       top: 0.75rem;
       right: 0.75rem;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.7);
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      color: #475569;
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
       font-size: 0.75rem;
@@ -151,8 +152,8 @@
     }
 
     .citation-block .copy-btn:hover {
-      background: rgba(255,255,255,0.2);
-      color: white;
+      background: #cbd5e1;
+      color: #1e293b;
     }
 
     /* HuggingFace icon SVG inline */
@@ -355,12 +356,26 @@
         </div>
 
         <div class="figure-constrained">
+          <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 5.</strong> Segmentation results on the uCO3D dataset.
+          </p>
+        </div>
+
+        <div class="figure-constrained">
+          <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
+          <p class="figure-caption has-text-centered">
+            <strong>Figure 6.</strong> Segmentation results on the SPIn-NeRF dataset.
+          </p>
+        </div>
+
+        <div class="figure-constrained">
           <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft);">
             <img src="./static/images/nvos1.png" alt="Top half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
             <img src="./static/images/nvos2.png" alt="Bottom half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
           </div>
           <p class="figure-caption has-text-centered">
-            <strong>Figure 5.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
+            <strong>Figure 7.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
           </p>
         </div>
 
@@ -379,7 +394,7 @@
         </p>
         <div class="citation-block">
           <button class="copy-btn" onclick="copyCitation()">Copy</button>
-<pre style="margin: 0; white-space: pre; color: #e2e8f0;">@article{grant2026triangulang,
+<pre style="margin: 0; white-space: pre; color: #334155;">@article{grant2026triangulang,
   title     = {TrianguLang: Geometry-Aware Semantic Consensus
                for Pose-Free 3D Localization},
   author    = {Grant, Bryce and Rothenberg, Aryeh and
