@@ -5,3 +5,7 @@
 .env
 node_modules/
 INTERACTIVE_VIEWER.md
+
+# Cloned reference repos (not part of the project)
+gauss_gym/
+nerfies-ref/
