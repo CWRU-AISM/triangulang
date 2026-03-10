@@ -1,0 +1,253 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{align2024}
+Cai, Z., Liu, S., Wang, G., Ge, Z., Zhang, X., Huang, D.: Align-detr: Enhancing
+  end-to-end object detection with aligned loss (2024),
+  \url{https://arxiv.org/abs/2304.07527}
+
+\bibitem{sam3}
+Carion, N., Gustafson, L., Hu, Y.T., Debnath, S., Hu, R., Suris, D., Ryali, C.,
+  Alwala, K.V., Khedr, H., Huang, A., Lei, J., Ma, T., Guo, B., Kalla, A.,
+  Marks, M., Greer, J., Wang, M., Sun, P., Rädle, R., Afouras, T., Mavroudi,
+  E., Xu, K., Wu, T.H., Zhou, Y., Momeni, L., Hazra, R., Ding, S., Vaze, S.,
+  Porcher, F., Li, F., Li, S., Kamath, A., Cheng, H.K., Dollár, P., Ravi, N.,
+  Saenko, K., Zhang, P., Feichtenhofer, C.: Sam 3: Segment anything with
+  concepts (2025), \url{https://arxiv.org/abs/2511.16719}
+
+\bibitem{SAGA}
+Cen, J., Fang, J., Yang, C., Xie, L., Zhang, X., Shen, W., Tian, Q.: Segment
+  any 3d gaussians (2025), \url{https://arxiv.org/abs/2312.00860}
+
+\bibitem{SA3D}
+Cen, J., Fang, J., Zhou, Z., Yang, C., Xie, L., Zhang, X., Shen, W., Tian, Q.:
+  Segment anything in 3d with radiance fields (2024),
+  \url{https://arxiv.org/abs/2304.12308}
+
+\bibitem{spatialvlm}
+Chen, B., Xu, Z., Kirmani, S., Ichter, B., Driess, D., Florence, P., Sadigh,
+  D., Guibas, L., Xia, F.: Spatialvlm: Endowing vision-language models with
+  spatial reasoning capabilities (2024), \url{https://arxiv.org/abs/2401.12168}
+
+\bibitem{scanrefer}
+Chen, D.Z., Chang, A.X., Nießner, M.: Scanrefer: 3d object localization in
+  rgb-d scans using natural language (2020),
+  \url{https://arxiv.org/abs/1912.08830}
+
+\bibitem{spatialrgpt}
+Cheng, A.C., Yin, H., Fu, Y., Guo, Q., Yang, R., Kautz, J., Wang, X., Liu, S.:
+  Spatialrgpt: Grounded spatial reasoning in vision language models (2024),
+  \url{https://arxiv.org/abs/2406.01584}
+
+\bibitem{clickgauss}
+Choi, S., Song, H., Kim, J., Kim, T., Do, H.: Click-gaussian: Interactive
+  segmentation to any 3d gaussians (2024),
+  \url{https://arxiv.org/abs/2407.11793}
+
+\bibitem{ding2024sam2long}
+Ding, S., Qian, R., Dong, X., Zhang, P., Zang, Y., Cao, Y., Gao, Y., Lin, D.,
+  Wang, J.: Sam2long: Enhancing sam 2 for long video segmentation with a
+  training-free memory tree (2024), \url{https://arxiv.org/abs/2410.16268}
+
+\bibitem{refersplat}
+He, S., Jie, G., Wang, C., Zhou, Y., Hu, S., Li, G., Ding, H.: Refersplat:
+  Referring segmentation in 3d gaussian splatting (2025),
+  \url{https://arxiv.org/abs/2508.08252}
+
+\bibitem{3dllm}
+Hong, Y., Zhen, H., Chen, P., Zheng, S., Du, Y., Chen, Z., Gan, C.: 3d-llm:
+  Injecting the 3d world into large language models (2023),
+  \url{https://arxiv.org/abs/2307.12981}
+
+\bibitem{leo}
+Huang, J., Yong, S., Ma, X., Linghu, X., Li, P., Wang, Y., Li, Q., Zhu, S.C.,
+  Jia, B., Huang, S.: An embodied generalist agent in 3d world (2024),
+  \url{https://arxiv.org/abs/2311.12871}
+
+\bibitem{mvsam}
+Jeong, Y., Sun, C., Wang, Y.C.F., Cho, M., Choe, J.: Mv-sam: Multi-view
+  promptable segmentation using pointmap guidance (2026),
+  \url{https://arxiv.org/abs/2601.17866}
+
+\bibitem{spatialids2026}
+Kang, R., Chen, H., Gkioxari, G., Perona, P.: Linear mechanisms for
+  spatiotemporal reasoning in vision language models (2026),
+  \url{https://arxiv.org/abs/2601.12626}
+
+\bibitem{3dgs}
+Kerbl, B., Kopanas, G., Leimkühler, T., Drettakis, G.: 3d gaussian splatting
+  for real-time radiance field rendering (2023),
+  \url{https://arxiv.org/abs/2308.04079}
+
+\bibitem{lerf}
+Kerr, J., Kim, C.M., Goldberg, K., Kanazawa, A., Tancik, M.: Lerf: Language
+  embedded radiance fields (2023), \url{https://arxiv.org/abs/2303.09553}
+
+\bibitem{sam}
+Kirillov, A., Mintun, E., Ravi, N., Mao, H., Rolland, C., Gustafson, L., Xiao,
+  T., Whitehead, S., Berg, A.C., Lo, W.Y., Dollár, P., Girshick, R.: Segment
+  anything (2023), \url{https://arxiv.org/abs/2304.02643}
+
+\bibitem{conceptpose}
+Kuang, L., Velikova, Y., Saleh, M., Zaech, J.N., Paudel, D.P., Busam, B.:
+  Conceptpose: Training-free zero-shot object pose estimation using concept
+  vectors (2025), \url{https://arxiv.org/abs/2512.09056}
+
+\bibitem{any6d}
+Lee, T., Wen, B., Kang, M., Kang, G., Kweon, I.S., Yoon, K.J.: Any6d:
+  Model-free 6d pose estimation of novel objects (2025),
+  \url{https://arxiv.org/abs/2503.18673}
+
+\bibitem{semanticsplat}
+Li, Q., Sun, J., An, L., Su, Z., Zhang, H., Liu, Y.: Semanticsplat:
+  Feed-forward 3d scene understanding with language-aware gaussian fields
+  (2025), \url{https://arxiv.org/abs/2506.09565}
+
+\bibitem{langsplatv2}
+Li, W., Zhao, Y., Qin, M., Liu, Y., Cai, Y., Gan, C., Pfister, H.: Langsplatv2:
+  High-dimensional 3d language gaussian splatting with 450+ fps (2025),
+  \url{https://arxiv.org/abs/2507.07136}
+
+\bibitem{da3}
+Lin, H., Chen, S., Liew, J., Chen, D.Y., Li, Z., Shi, G., Feng, J., Kang, B.:
+  Depth anything 3: Recovering the visual space from any views (2025),
+  \url{https://arxiv.org/abs/2511.10647}
+
+\bibitem{dl3dv}
+Ling, L., Sheng, Y., Tu, Z., Zhao, W., Xin, C., Wan, K., Yu, L., Guo, Q., Yu,
+  Z., Lu, Y., Li, X., Sun, X., Ashok, R., Mukherjee, A., Kang, H., Kong, X.,
+  Hua, G., Zhang, T., Benes, B., Bera, A.: Dl3dv-10k: A large-scale scene
+  dataset for deep learning-based 3d vision (2023),
+  \url{https://arxiv.org/abs/2312.16256}
+
+\bibitem{UCo3D}
+Liu, X., Tayal, P., Wang, J., Zarzar, J., Monnier, T., Tertikas, K., Duan, J.,
+  Toisoul, A., Zhang, J.Y., Neverova, N., Vedaldi, A., Shapovalov, R., Novotny,
+  D.: Uncommon objects in 3d (2025), \url{https://arxiv.org/abs/2501.07574}
+
+\bibitem{nerf}
+Mildenhall, B., Srinivasan, P.P., Tancik, M., Barron, J.T., Ramamoorthi, R.,
+  Ng, R.: Nerf: Representing scenes as neural radiance fields for view
+  synthesis (2020), \url{https://arxiv.org/abs/2003.08934}
+
+\bibitem{spinnerf}
+Mirzaei, A., Aumentado-Armstrong, T., Derpanis, K.G., Kelly, J., Brubaker,
+  M.A., Gilitschenski, I., Levinshtein, A.: Spin-nerf: Multiview segmentation
+  and perceptual inpainting with neural radiance fields (2023),
+  \url{https://arxiv.org/abs/2211.12254}
+
+\bibitem{GTA}
+Miyato, T., Jaeger, B., Welling, M., Geiger, A.: Gta: A geometry-aware
+  attention mechanism for multi-view transformers (2024),
+  \url{https://arxiv.org/abs/2310.10375}
+
+\bibitem{open3dis}
+Nguyen, P.D.A., Ngo, T.D., Kalogerakis, E., Gan, C., Tran, A., Pham, C.,
+  Nguyen, K.: Open3dis: Open-vocabulary 3d instance segmentation with 2d mask
+  guidance (2024), \url{https://arxiv.org/abs/2312.10671}
+
+\bibitem{openscene3d}
+Peng, S., Genova, K., Jiang, C.M., Tagliasacchi, A., Pollefeys, M., Funkhouser,
+  T.: Openscene: 3d scene understanding with open vocabularies (2023),
+  \url{https://arxiv.org/abs/2211.15654}
+
+\bibitem{gags}
+Peng, Y., Wang, C., Wang, X., Lu, Y., Wang, J., Fu, Y.: Gags: Granularity-aware
+  feature distillation for language gaussian splatting (2024)
+
+\bibitem{langsplat}
+Qin, M., Li, W., Zhou, J., Wang, H., Pfister, H.: Langsplat: 3d language
+  gaussian splatting (2024), \url{https://arxiv.org/abs/2312.16084}
+
+\bibitem{goi}
+Qu, Y., Dai, S., Li, X., Lin, J., Cao, L., Zhang, S., Ji, R.: Goi: Find 3d
+  gaussians of interest with an optimizable open-vocabulary semantic-space
+  hyperplane. In: Proceedings of the 32nd ACM International Conference on
+  Multimedia (2024)
+
+\bibitem{clip}
+Radford, A., Kim, J.W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry,
+  G., Askell, A., Mishkin, P., Clark, J., Krueger, G., Sutskever, I.: Learning
+  transferable visual models from natural language supervision (2021),
+  \url{https://arxiv.org/abs/2103.00020}
+
+\bibitem{sam2}
+Ravi, N., Gabeur, V., Hu, Y.T., Hu, R., Ryali, C., Ma, T., Khedr, H., Rädle,
+  R., Rolland, C., Gustafson, L., Mintun, E., Pan, J., Alwala, K.V., Carion,
+  N., Wu, C.Y., Girshick, R., Dollár, P., Feichtenhofer, C.: Sam 2: Segment
+  anything in images and videos (2024), \url{https://arxiv.org/abs/2408.00714}
+
+\bibitem{NVOS}
+Ren, Z., Agarwala, A., Russell, B., Schwing, A.G., Wang, O.: Neural volumetric
+  object selection (2022), \url{https://arxiv.org/abs/2205.14929}
+
+\bibitem{mvfoundation}
+Segre, L., Hirschorn, O., Avidan, S.: Multi-view foundation models (2025),
+  \url{https://arxiv.org/abs/2512.15708}
+
+\bibitem{legaussians}
+Shi, J.C., Wang, M., Duan, H.B., Guan, S.H.: Language embedded 3d gaussians for
+  open-vocabulary scene understanding (2023),
+  \url{https://arxiv.org/abs/2311.18482}
+
+\bibitem{openmask3d}
+Takmaz, A., Fedele, E., Sumner, R.W., Pollefeys, M., Tombari, F., Engelmann,
+  F.: Openmask3d: Open-vocabulary 3d instance segmentation (2023),
+  \url{https://arxiv.org/abs/2306.13631}
+
+\bibitem{VGGT}
+Wang, J., Chen, M., Karaev, N., Vedaldi, A., Rupprecht, C., Novotny, D.: Vggt:
+  Visual geometry grounded transformer (2025),
+  \url{https://arxiv.org/abs/2503.11651}
+
+\bibitem{dust3r}
+Wang, S., Leroy, V., Cabon, Y., Chidlovskii, B., Revaud, J.: Dust3r: Geometric
+  3d vision made easy (2024), \url{https://arxiv.org/abs/2312.14132}
+
+\bibitem{pi3}
+Wang, Y., Zhou, J., Zhu, H., Chang, W., Zhou, Y., Li, Z., Chen, J., Pang, J.,
+  Shen, C., He, T.: $\pi^3$: Permutation-equivariant visual geometry learning
+  (2025), \url{https://arxiv.org/abs/2507.13347}
+
+\bibitem{SA3D-GS}
+Wang, Y., Fang, T., Quan, L.: Sa3d-gs: Segment any 3d gaussian splatting
+  (2024), \url{https://arxiv.org/abs/2403.16384}
+
+\bibitem{foundationpose}
+Wen, B., Yang, W., Kautz, J., Birchfield, S.: Foundationpose: Unified 6d pose
+  estimation and tracking of novel objects (2024),
+  \url{https://arxiv.org/abs/2312.08344}
+
+\bibitem{llm-grounder}
+Yang, J., Chen, X., Qian, S., Madaan, N., Iyengar, M., Fouhey, D.F., Chai, J.:
+  Llm-grounder: Open-vocabulary 3d visual grounding with large language model
+  as an agent (2023), \url{https://arxiv.org/abs/2309.12311}
+
+\bibitem{gaussiangrouping}
+Ye, M., Danelljan, M., Yu, F., Ke, L.: Gaussian grouping: Segment and edit
+  anything in 3d scenes (2024), \url{https://arxiv.org/abs/2312.00732}
+
+\bibitem{scannet++}
+Yeshwanth, C., Liu, Y.C., Nießner, M., Dai, A.: Scannet++: A high-fidelity
+  dataset of 3d indoor scenes (2023), \url{https://arxiv.org/abs/2308.11417}
+
+\bibitem{omniseg3d}
+Ying, H., Yin, Y., Zhang, J., Wang, F., Yu, T., Huang, R., Fang, L.: Omniseg3d:
+  Omniversal 3d segmentation via hierarchical contrastive learning (2023),
+  \url{https://arxiv.org/abs/2311.11666}
+
+\bibitem{yu2024legs}
+Yu, J., Hari, K., Srinivas, K., El-Refai, K., Rashid, A., Kim, C.M., Kerr, J.,
+  Cheng, R., Irshad, M.Z., Balakrishna, A., Kollar, T., Goldberg, K.:
+  Language-embedded gaussian splats (legs): Incrementally building room-scale
+  representations with a mobile robot (2024),
+  \url{https://arxiv.org/abs/2409.18108}
+
+\bibitem{fmgs}
+Zuo, X., Samangouei, P., Zhou, Y., Di, Y., Li, M.: Fmgs: Foundation model
+  embedded 3d gaussian splatting for holistic 3d scene understanding (2024),
+  \url{https://arxiv.org/abs/2401.01970}
+
+\end{thebibliography}

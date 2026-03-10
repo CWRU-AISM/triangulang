@@ -1,0 +1,43 @@
+% \todo[inline]{ATRI \& ARYEH: Look into oracle IoU/mACC for these segmentation models. The problem with promptable segmentation is if you provide a prompt like apple or click an apple and there are multiple apples in the scene, if you take the top k masks produced by your model, then it will segment all apples or it might segment the wrong apple (the one you did not intend). So many segmentation models rely on Oracle IoU which means at run time, they pick the masks that optimize the IoU (compare to GT) If you do find papers reporting both, feel free to put a table in discussing. }
+
+\subsection{Optimization-Based 3D Grounding}
+Traditional methods for grounding language in 3D, such as ScanRefer \cite{scanrefer} and OpenScene \cite{openscene3d} operate on pre-scanned 3D point cloud and posed images as input. While effective, they are limited by the requirement of a pre-existing, high-quality 3D map. More recent neural rendering approaches achieve dense 3D grounding by distilling semantic features into implicit representations.
+
+Neural rendering methods distill semantic features into implicit scene representations. LERF~\cite{lerf} embeds multi-scale CLIP features into NeRF via volume rendering, enabling open-vocabulary 3D queries. LangSplat~\cite{langsplat} extends this to 3D Gaussian Splatting by using SAM to segment training images, extracting hierarchical CLIP features, and attaching compressed representations to each Gaussian. FMGS~\cite{fmgs} uses multi-resolution hash encoding to represent CLIP and DINO features more efficiently. LEGS~\cite{yu2024legs} and SemanticSplat~\cite{semanticsplat} similarly augment Gaussians with semantic attributes distilled from foundation models. While SemanticSplat employs feed-forward feature prediction, it still requires a pre-computed 3DGS reconstruction from calibrated images. These methods share fundamental limitations: they require calibrated camera poses and per-scene reconstruction or optimization (10 to 45 minutes). TrianguLang operates in a feed-forward manner on uncalibrated images, processing new scenes without any optimization.
+
+Any6D \cite{any6d} estimates the 6D pose of novel objects in a feed-forward manner but operates at object-level granularity and lacks language supervision. Recent work such as Segment Any 3D Gaussians \cite{SAGA}, and Click-Gaussian \cite{clickgauss} extend 3D segmentation to Gaussian Splatting but require clicks or pre-computed masks rather than end-to-end language grounding.
+
+% \todo[inline]{The use of CLIP for text based segmentation/localization. And the downsides of using CLIP in depth estimation}
+
+\subsection{Open-Vocabulary 3D Segmentation}
+State-of-the-art open-vocabulary methods like OpenMask3D~\cite{openmask3d} and Open3DIS~\cite{open3dis} adopt a ``lift-and-project'' strategy: they segment 2D images and aggregate features into a pre-built 3D point cloud. OmniSeg3D~\cite{omniseg3d} uses hierarchical contrastive learning for omniversal segmentation, but still relies on dense 3D reconstruction. These methods cannot function without a pre-existing 3D map of the environment. ReferSplat~\cite{refersplat} introduces Referring 3D Gaussian Splatting Segmentation (R3DGS), which segments objects based on natural language descriptions containing spatial relations and attributes. ReferSplat demonstrates that 3DGS can handle complex referring expressions with spatial language. However, it still requires per-scene optimization ($\sim$58 minutes training) and calibrated poses for reconstruction. TrianguLang achieves similar spatial language capability in a feed-forward, pose-free setting via explicit geometric computation on depth-derived 3D positions without requiring reconstruction.
+
+
+% Each Gaussian receives a learned ``referring feature'' vector; segmentation masks are obtained by computing similarity between Gaussian features and BERT-encoded text embeddings. A Position-aware Cross-Modal Interaction module integrates 3D position information into cross-attention, enabling spatial reasoning (e.g., ``the cup near the window''). Gaussian-Text Contrastive Learning further improves discrimination between similar expressions.
+
+\subsection{Multi-View Segmentation}
+SAM2 and SAM3 \cite{sam2,sam3} propagate masks through video but lack 3D geometric guarantees, drifting when views change significantly. MV-SAM  \cite{mvsam} leverages pointmaps for multi-view segmentation but relies on click prompts rather than language. MV-SAM treats views as independent samples, admitting no explicit enforcement of geometric consistency. GTA \cite{GTA} injects camera geometry into attention via epipolar constraints but requires \textit{known} camera poses. Multi-View Foundation Models \cite{mvfoundation} adapt 2D backbones into multi-view consistent variants via cross-view attention and Pl\"ucker pose embeddings. However, like GTA, they require known camera poses and focus on feature consistency rather than language-prompted localization, outputting per-pixel embeddings rather than 3D coordinates. Emerging approaches like VGGT \cite{VGGT} explore visual-geometric grounding in Transformers but focus on generation rather than metric localization. We adapt this insight to the map-free regime by driving attention with estimated metric depth, enabling geometry-aware consistency without requiring a pre-built dense map.
+
+
+
+% but requires click prompts, admits no explicit 3D consistency enforcement and outputs masks, not 3D coordinates.
+
+
+\subsection{Spatial Reasoning in Vision-Language}
+Interpreting spatial relations (``nearest,'' ``left of,'' ``behind'') in natural language is challenging. Recent approaches delegate this to large models: SpatialVLM~\cite{spatialvlm} fine-tunes a 7B-parameter VLM on 2M spatial QA pairs; 3D-LLM~\cite{3dllm} injects 3D point cloud features into LLaMA; LEO~\cite{leo} uses an embodied agent with chain-of-thought prompting; SpatialRGPT~\cite{spatialrgpt} conditions a VLM on depth; LLM-Grounder~\cite{llm-grounder} uses an LLM agent to iteratively refine 3D bounding boxes. SAM3's Agent mode~\cite{sam3} combines with an MLLM (Qwen2.5-VL) for complex spatial queries.
+
+These approaches achieve impressive reasoning but incur 1 to 10+ seconds latency per query. Concurrently, mechanistic interpretability work~\cite{spatialids2026} reveals that VLMs encode spatial locations by linearly binding ``Spatial IDs'' to object token activations, but finds that depth and height share similar spatial representations, suggesting fundamental limitations in 3D reasoning
+
+TrianguLang takes a complementary approach: rather than relying on learned spatial representations that suffer from this depth collapse, we parse a constrained vocabulary of spatial qualifiers (nearest, leftmost, behind, etc.) with regex and resolve them via direct geometric computation on depth-derived 3D centroids. This enables real-time spatial grounding ($\sim$60ms) with true 3D awareness without relying on LLMs.
+
+
+
+% \begin{itemize}
+%     \item \textbf{Gaussian Grouping \cite{gaussiangrouping}}: Assignment of identity encodings to individual Gaussians to enable element grouping and object-level scene understanding. Class labels predicted from 2D input by SAM. Grouping allows for scene editing: "3D object removal, inpainting, colorization, style transfer and scene recomposition."
+%     \item \textbf{SemanticSplat \cite{semanticsplat}}: Augments individual Gaussians with semantic attributes during rendering. Knowledge distillation from SAM and CLIP-LSeg allows for promptable, open-vocabulary segmentation. % not sure how we're structuring RR anymore. This could go in O-V Seg.
+%     \item \textbf{GSNeRF \cite{gsnerf}}: Derives visual features alongside depth information to build semantic segmentation maps into NeRFs.
+%     \item \textbf{FMGS \cite{fmgs}}: Semantic embedding of CLIP and DINO feature maps in Gaussian Splats. Uses Multi Resolution Hash encodings to increase efficieny by avoiding per-item labeling (I think).
+%     \item \textbf{ReferSplat \cite{refersplat}}: Assigns each Gaussian a referring feature vector and then determines the similarity with textual queries (natural language expressions) to develop a 2D segmentation mask. Uses contrastive learning on the Gaussians and the text expression to ensure the query leads to the correct object.
+% \end{itemize}
+
+% Semantic Gaussian Splatting subsection removed for space (content covered in Optimization-Based section above)

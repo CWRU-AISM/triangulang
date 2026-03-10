@@ -7,153 +7,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TrianguLang</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
 
   <style>
-    :root {
-      --primary: #1e293b;
-      --accent: #c0392b;
-      --text-mid: #475569;
-      --text-light: #94a3b8;
-      --shadow-soft: 0 4px 24px rgba(0,0,0,0.08);
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f8fafc;
-      color: var(--primary);
-    }
-
-    .hero-gradient {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2d3748 100%);
-      color: white;
-    }
-
-    .section-title {
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-alt {
-      background: #f1f5f9;
-    }
-
-    .figure-placeholder {
-      background: #e2e8f0;
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 280px;
-      color: var(--text-light);
-      font-size: 0.95rem;
-      font-style: italic;
-      margin: 1.5rem 0;
-    }
-
-    .figure-caption {
-      font-size: 0.88rem;
-      color: var(--text-mid);
-      margin-top: 0.75rem;
-      line-height: 1.6;
-    }
-
     .figure-constrained {
-      max-width: 800px;
+      max-width: 100%;
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
     }
 
     .figure-constrained:last-child {
       margin-bottom: 0;
     }
 
-    .content-card {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .reference-item {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      line-height: 1.6;
-    }
-
-    .reference-item:last-child {
-      border-bottom: none;
-    }
-
-    .navbar {
-      background: rgba(15, 23, 42, 0.97);
-      backdrop-filter: blur(8px);
-    }
-
-    .navbar-item, .navbar-item a {
-      color: rgba(255,255,255,0.8) !important;
-    }
-
-    .navbar-item:hover {
-      background: rgba(255,255,255,0.08) !important;
-      color: white !important;
-    }
-
     .publication-links .button {
       margin: 0.25rem;
     }
 
-    .coming-soon-badge {
-      font-size: 0.7rem;
-      font-weight: 600;
-      background: rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.7);
-      padding: 0.15rem 0.5rem;
-      border-radius: 8px;
-      margin-left: 0.3rem;
-      vertical-align: middle;
-    }
-
     .citation-block {
-      background: #f1f5f9;
-      color: #334155;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-family: monospace;
       font-size: 0.82rem;
       line-height: 1.7;
       overflow-x: auto;
       position: relative;
-    }
-
-    .citation-block .copy-btn {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      background: #e2e8f0;
-      border: 1px solid #cbd5e1;
-      color: #475569;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s;
-    }
-
-    .citation-block .copy-btn:hover {
-      background: #cbd5e1;
-      color: #1e293b;
     }
 
     /* HuggingFace icon SVG inline */
@@ -163,6 +48,13 @@
       vertical-align: -0.125em;
       display: inline-block;
     }
+
+    /* WIP content: hidden in production, visible with ?dev */
+    .wip { display: none !important; }
+    body.show-wip .wip { display: block !important; }
+    body.show-wip section.wip { display: block !important; }
+    body.show-wip div.wip { display: block !important; }
+    body.show-wip a.wip { display: inline-block !important; }
   </style>
 </head>
 <body>
@@ -182,87 +74,95 @@
     </div>
     <div id="mainNavbar" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="#section1">Abstract</a>
-        <a class="navbar-item" href="#section2">Qualitative Results</a>
+        <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#method">Method</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item wip" href="#interactive">Demo</a>
+        <a class="navbar-item wip" href="#tsdf">3D Viewer</a>
         <a class="navbar-item" href="#citation">Citation</a>
-        <a class="navbar-item" href="#acknowledgements">Acknowledgements</a>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- ===== HERO / TITLE & LINKS ===== -->
-<section class="hero is-large hero-gradient" style="padding-top: 52px;">
-  <div class="hero-body">
+<!-- ===== HERO WITH VIDEO BACKGROUND ===== -->
+<section class="hero is-fullheight-with-navbar hero-video-section" style="position: relative; overflow: hidden;">
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+    <source src="./static/videos/teaser.mp4" type="video/mp4">
+  </video>
+  <!-- Dark Overlay -->
+  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.55); z-index: 1;"></div>
+
+  <div class="hero-body" style="position: relative; z-index: 2;">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
 
-          <h1 class="title is-1" style="color: white; font-weight: 800; margin-bottom: 1rem;">
+          <h1 class="title is-1 publication-title" style="color: white;">
             TrianguLang
           </h1>
-          <h2 class="subtitle is-4" style="color: rgba(255,255,255,0.75); font-weight: 400; margin-bottom: 2rem;">
+          <h2 class="subtitle is-4" style="color: rgba(255,255,255,0.85); margin-bottom: 2rem;">
             Geometry-Aware Semantic Consensus for Pose-Free 3D Localization
           </h2>
 
           <!-- Authors -->
-          <div class="is-size-5" style="margin-bottom: 0.5rem; color: rgba(255,255,255,0.9);">
-            <span style="margin: 0 0.4rem;">
-              <a href="#" style="color: rgba(255,255,255,0.9);">Bryce Grant</a><sup>1</sup>,
-            </span>
-            <span style="margin: 0 0.4rem;">
-              <a href="#" style="color: rgba(255,255,255,0.9);">Aryeh Rothenberg</a><sup>1</sup>,
-            </span>
-            <span style="margin: 0 0.4rem;">
-              <a href="#" style="color: rgba(255,255,255,0.9);">Atri Banerjee</a><sup>1</sup>,
-            </span>
-            <span style="margin: 0 0.4rem;">
-              <a href="#" style="color: rgba(255,255,255,0.9);">Peng Wang</a><sup>1</sup>
+          <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
+            <span class="author-block">
+              <a href="https://bryceag11.github.io" target="_blank" style="color: rgba(255,255,255,0.9);">Bryce Grant</a><sup style="color: white;">1</sup>,</span>
+            <span class="author-block" style="color: rgba(255,255,255,0.9);">
+              Aryeh Rothenberg<sup>1</sup>,</span>
+            <span class="author-block" style="color: rgba(255,255,255,0.9);">
+              Atri Banerjee<sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=4CbVWDcAAAAJ&hl=en" target="_blank" style="color: rgba(255,255,255,0.9);">Peng Wang</a><sup style="color: white;">1</sup>
             </span>
           </div>
-          <div class="is-size-6" style="color: rgba(255,255,255,0.55); margin-bottom: 2rem;">
-            <sup>1</sup>Case Western Reserve University
+          <div class="is-size-5 publication-authors" style="margin-bottom: 2rem; color: rgba(255,255,255,0.6);">
+            <span class="author-block"><sup>1</sup>Case Western Reserve University</span>
           </div>
 
           <!-- Links -->
-          <div class="publication-links">
-            <span class="link-block">
-              <a href="#" class="button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                <span>Paper</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a href="#" class="button is-normal is-rounded is-dark">
-                <span class="icon"><i class="ai ai-arxiv"></i></span>
-                <span>arXiv</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a class="button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
-                <span class="icon"><i class="fab fa-github"></i></span>
-                <span>Code</span>
-                <span class="coming-soon-badge">Coming Soon</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a class="button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
-                <span class="icon">
-                  <svg class="hf-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 88" fill="currentColor">
-                    <path d="M47.2 0C26.3 0 8.8 16 6.2 36.7c-1.5 11.8 1.8 23.2 9.2 32.1 7.4 8.9 18 14.5 29.8 15.7 1.4.1 2.7.2 4 .2 10.2 0 20-3.7 27.6-10.5 8.9-7.9 14.2-19.2 14.2-31.2 0-1.2 0-2.4-.1-3.6C88.6 17.5 70 0 47.2 0zM30.3 38.5c2.6 0 4.8 1.5 5.9 3.6.3.7.5 1.4.5 2.2 0 .5-.1 1-.2 1.4-.9 2.5-3.3 4.3-6.1 4.3-3.6 0-6.5-2.9-6.5-6.5 0-2.8 1.7-5.1 4.2-6h2.2zm34.5 0c2.6 0 4.8 1.5 5.9 3.6.3.7.5 1.4.5 2.2 0 .5-.1 1-.2 1.4-.9 2.5-3.3 4.3-6.1 4.3-3.6 0-6.5-2.9-6.5-6.5 0-2.8 1.7-5.1 4.2-6h2.2zM26.1 29.5c1.1-4.4 5-7.5 9.7-7.5 4.6 0 8.5 3.1 9.7 7.5M49.6 29.5c1.1-4.4 5-7.5 9.7-7.5 4.6 0 8.5 3.1 9.7 7.5M28.8 56.5c2 5.4 7.1 10.7 18.4 10.7s16.4-5.3 18.4-10.7"/>
-                  </svg>
-                </span>
-                <span>Checkpoints</span>
-                <span class="coming-soon-badge">Coming Soon</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a class="button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
-                <span class="icon"><i class="fas fa-play"></i></span>
-                <span>Demo</span>
-                <span class="coming-soon-badge">Coming Soon</span>
-              </a>
-            </span>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2603.08096"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                  <span class="coming-soon-badge">Coming Soon</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
+                  <span class="icon">
+                    <svg class="hf-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 88">
+                      <path d="M47.21 76.5a34.75 34.75 0 1 0 0-69.5 34.75 34.75 0 0 0 0 69.5Z" fill="#FFD21E"/>
+                      <path d="M81.96 41.75a34.75 34.75 0 1 0-69.5 0 34.75 34.75 0 0 0 69.5 0Zm-73.5 0a38.75 38.75 0 1 1 77.5 0 38.75 38.75 0 0 1-77.5 0Z" fill="#FF9D0B" fill-rule="evenodd"/>
+                      <path d="M58.5 32.3c1.28.44 1.78 3.06 3.07 2.38a5 5 0 1 0-6.76-2.07c.61 1.15 2.55-.72 3.7-.32ZM34.95 32.3c-1.28.44-1.79 3.06-3.07 2.38a5 5 0 1 1 6.76-2.07c-.61 1.15-2.56-.72-3.7-.32Z" fill="#3A3B45"/>
+                      <path d="M46.96 56.29c9.83 0 13-8.76 13-13.26 0-2.34-1.57-1.6-4.09-.36-2.33 1.15-5.46 2.74-8.9 2.74-7.19 0-13-6.88-13-2.38s3.16 13.26 13 13.26Z" fill="#FF323D"/>
+                      <path d="M39.43 54a8.7 8.7 0 0 1 5.3-4.49c.4-.12.81.57 1.24 1.28.4.68.82 1.37 1.24 1.37.45 0 .9-.68 1.33-1.35.45-.7.89-1.38 1.32-1.25a8.61 8.61 0 0 1 5 4.17c3.73-2.94 5.1-7.74 5.1-10.7 0-2.34-1.57-1.6-4.09-.36l-.14.07c-2.31 1.15-5.39 2.67-8.77 2.67s-6.45-1.52-8.77-2.67c-2.6-1.29-4.23-2.1-4.23.29 0 3.05 1.46 8.06 5.47 10.97Z" fill="#3A3B45" fill-rule="evenodd"/>
+                      <path d="M70.71 37a3.25 3.25 0 1 0 0-6.5 3.25 3.25 0 0 0 0 6.5ZM24.21 37a3.25 3.25 0 1 0 0-6.5 3.25 3.25 0 0 0 0 6.5Z" fill="#FF9D0B"/>
+                    </svg>
+                  </span>
+                  <span>Checkpoints</span>
+                  <span class="coming-soon-badge">Coming Soon</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
+                  <span class="icon"><i class="fas fa-play"></i></span>
+                  <span>Demo</span>
+                  <span class="coming-soon-badge">Coming Soon</span>
+                </a>
+              </span>
+            </div>
           </div>
 
         </div>
@@ -272,13 +172,12 @@
 </section>
 
 <!-- ===== ABSTRACT ===== -->
-<section class="section" id="section1">
+<section class="section" id="abstract">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Abstract</h2>
-
-    <div class="columns is-centered">
+    <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
           <p>
             Localizing objects and parts from natural language in 3D space is essential for robotics, AR, and embodied AI,
             yet existing methods face a trade-off between the accuracy and geometric consistency of per-scene optimization and the efficiency of feed-forward inference.
@@ -286,121 +185,300 @@
             Unlike prior methods that treat views independently, we introduce Geometry-Aware Semantic Attention (GASA), which utilizes predicted geometry to gate cross-view feature correspondence,
             suppressing semantically plausible but geometrically inconsistent matches without requiring ground-truth poses.
             Validated on five benchmarks including ScanNet++ and uCO3D, TrianguLang achieves state-of-the-art feed-forward text-guided segmentation and localization,
-            reducing user effort from <i>O</i>(<i>N</i>) clicks to a single text query. The model processes each frame in ~58ms
-            (~17 FPS) without optimization,
+            reducing user effort from <i>O</i>(<i>N</i>) clicks to a single text query. The model processes each frame at 1008&times;1008 resolution in ~57ms
+            (~18 FPS) without optimization,
             enabling practical deployment for interactive robotics and AR applications.
           </p>
         </div>
       </div>
     </div>
-
-<!-- ===== Arch and Decoder Diagrams ===== -->
-   <div class="columns is-centered" style="margin-top: 2rem;">
-      <div class="column is-four-fifths">
-
-        <div class="figure-constrained">
-          <img src="static/images/architecture.png" alt="Overview of the TrianguLang architecture" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 1.</strong> Overview of the TrianguLang architecture.
-          </p>
-        </div>
-
-        <div class="figure-constrained">
-          <img src="static/images/decoder.png" alt="Overview of the GASA decoder" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 2.</strong> Overview of the GASA decoder.
-          </p>
-        </div>
-
-      </div>
-    </div>
+  </div>
 </section>
 
-<!-- ===== QUALITATIVE RESULTS ===== -->
-<section class="section section-alt" id="section2">
+<!-- ===== METHOD ===== -->
+<section class="section" id="method">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Qualitative Results</h2>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">How It Works</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            TrianguLang takes uncalibrated RGB images and a single text query (e.g. "the red mug") and produces per-view segmentation masks plus a 3D centroid in world coordinates. No camera poses, no SLAM, no per-scene optimization.
+          </p>
+          <p>
+            The pipeline composes two frozen foundation models with a lightweight trained decoder:
+            <b>SAM3</b> (frozen, 848M) extracts text-conditioned semantic features,
+            <b>DA3-NESTED</b> (frozen, 1.4B) jointly estimates metric depth, intrinsics, and extrinsics from the input images, and
+            the <b>GASA decoder</b> (trained, 13.7M) fuses them with geometry-aware cross-view attention. Only 0.54% of the total parameters are trained.
+          </p>
+        </div>
+
+        <!-- Architecture diagram -->
+        <div class="figure-constrained">
+          <img src="static/images/architecture.png" alt="Overview of the TrianguLang architecture" style="width: 100%; height: auto; border-radius: 10px;">
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            Standard cross-attention matches features by semantic similarity alone, producing false correspondences between visually similar but spatially distant regions (e.g. two identical mugs). GASA introduces a geometric veto: each token carries a 3D position from depth unprojection, and a learned distance kernel penalizes attention between tokens that are far apart in metric space. If two features look similar but are meters apart, the geometric bias suppresses that match.
+          </p>
+          <p>
+            We also replace standard 2D positional encodings with world-space positional encoding: each pixel is unprojected to 3D using DA3 depth and camera parameters, then encoded with sinusoidal functions. The same physical point gets the same embedding regardless of viewpoint.
+          </p>
+        </div>
+
+        <!-- Decoder diagram -->
+        <div class="figure-constrained">
+          <img src="static/images/decoder.png" alt="Overview of the GASA decoder" style="width: 100%; height: auto; border-radius: 10px;">
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            Spatial qualifiers like "nearest chair" or "mug left of the keyboard" are handled through direct geometric computation on depth-derived 3D positions, no LLM required. The pipeline parses spatial keywords, generates mask candidates, computes 3D centroids via depth unprojection, and selects the candidate satisfying the constraint. This runs in ~60ms, compared to 1-10+ seconds for LLM-based spatial reasoning.
+          </p>
+        </div>
+
+        <!-- Spatial language demo placeholder (WIP) -->
+        <div class="figure-constrained wip">
+          <div style="background: #f5f5f5; border: 2px dashed #ccc; border-radius: 10px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #999; font-style: italic;">
+            Spatial language demo (static/images/spatial_demo.png)
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS ===== -->
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
 
     <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.8; color: var(--text-mid);">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">
           <p>
-            TrianguLang uses predicted geometry from DA3-NESTED to jointly estimate metric depth and camera intrinsics/extrinsics from the input images alone,
-            enabling deployment on uncalibrated camera systems and multi-camera setups without requiring SLAM or structure-from-motion (SfM) preprocessing.
+            On ScanNet++, a single text query achieves <b>62.4% mIoU</b>, beating MV-SAM's 51.0% with 12 click prompts (+11.4 points). Cross-dataset transfer reveals the biggest gap: TrianguLang trained on ScanNet++ scores <b>75.7% mIoU</b> on uCO3D, more than doubling MV-SAM's 32.2%. On LERF-OVS, TrianguLang closely matches LangSplat-V2 (58.1% vs. 59.9% mIoU) while running <b>three orders of magnitude faster</b> (~58ms vs. 10-45 minutes of per-scene optimization).
           </p>
+        </div>
+
+        <!-- Main comparison table -->
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Model</th>
+                <th style="color: white;">Setting</th>
+                <th style="color: white;">Train &rarr; Eval</th>
+                <th style="color: white; text-align: right;">mIoU &uarr;</th>
+                <th style="color: white; text-align: right;">mAcc &uarr;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="6">MV-SAM</td>
+                <td>In-domain</td>
+                <td>ScanNet++ &rarr; ScanNet++</td>
+                <td style="text-align: right;">0.510</td>
+                <td style="text-align: right;">0.694</td>
+              </tr>
+              <tr>
+                <td>In-domain</td>
+                <td>uCO3D &rarr; uCO3D</td>
+                <td style="text-align: right;">0.910</td>
+                <td style="text-align: right;">0.965</td>
+              </tr>
+              <tr>
+                <td>Cross-domain</td>
+                <td>uCO3D &rarr; ScanNet++</td>
+                <td style="text-align: right;">0.194</td>
+                <td style="text-align: right;">0.251</td>
+              </tr>
+              <tr>
+                <td>Cross-domain</td>
+                <td>ScanNet++ &rarr; uCO3D</td>
+                <td style="text-align: right;">0.322</td>
+                <td style="text-align: right;">0.517</td>
+              </tr>
+              <tr>
+                <td>Large-scale</td>
+                <td>SA-1B &rarr; ScanNet++</td>
+                <td style="text-align: right;">0.489</td>
+                <td style="text-align: right;">0.635</td>
+              </tr>
+              <tr>
+                <td>Large-scale</td>
+                <td>SA-1B &rarr; uCO3D</td>
+                <td style="text-align: right;">0.877</td>
+                <td style="text-align: right;">0.950</td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td rowspan="4"><b>TrianguLang (Ours)</b></td>
+                <td>In-domain</td>
+                <td>ScanNet++ &rarr; ScanNet++</td>
+                <td style="text-align: right;"><b>0.624</b></td>
+                <td style="text-align: right;"><b>0.774</b></td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td>In-domain</td>
+                <td>uCO3D &rarr; uCO3D</td>
+                <td style="text-align: right;"><b>0.946</b></td>
+                <td style="text-align: right;"><b>0.983</b></td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td>Cross-domain</td>
+                <td>uCO3D &rarr; ScanNet++</td>
+                <td style="text-align: right;"><b>0.279</b></td>
+                <td style="text-align: right;"><b>0.685</b></td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td>Cross-domain</td>
+                <td>ScanNet++ &rarr; uCO3D</td>
+                <td style="text-align: right;"><b>0.757</b></td>
+                <td style="text-align: right;"><b>0.796</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- LERF-OVS Table -->
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Method</th>
+                <th style="color: white; text-align: right;">mIoU</th>
+                <th style="color: white; text-align: right;">Loc. Acc.</th>
+                <th style="color: white; text-align: center;">Per-scene Opt.</th>
+                <th style="color: white; text-align: right;">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LERF</td>
+                <td style="text-align: right;">37.4</td>
+                <td style="text-align: right;">73.6</td>
+                <td style="text-align: center;">Yes</td>
+                <td style="text-align: right;">~45 min</td>
+              </tr>
+              <tr>
+                <td>LangSplat</td>
+                <td style="text-align: right;">51.4</td>
+                <td style="text-align: right;">84.3</td>
+                <td style="text-align: center;">Yes</td>
+                <td style="text-align: right;">~10 min</td>
+              </tr>
+              <tr>
+                <td>LangSplat-V2</td>
+                <td style="text-align: right;">59.9</td>
+                <td style="text-align: right;">84.1</td>
+                <td style="text-align: center;">Yes</td>
+                <td style="text-align: right;">~10 min</td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td><b>TrianguLang</b> (zero-shot)</td>
+                <td style="text-align: right;"><b>58.1</b></td>
+                <td style="text-align: right;">83.5</td>
+                <td style="text-align: center;">No</td>
+                <td style="text-align: right;"><b>~58ms</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content has-text-justified">
           <p>
-            TrianguLang operates in a single-prompt setting: the language query is provided
-            once and propagated across all views through geometric reasoning, reducing user
-            effort from <i>O</i>(<i>N</i>) clicks to <i>O</i>(1) text input.
+            Each component matters. Removing the GASA kernel drops mIoU by 5.3 points; removing world-space PE drops it by 5.4. Swapping the learned distance kernel for a fixed RBF costs 10.7 points. The model runs at ~57ms per frame (1008x1008, single A100), while per-scene methods require 30-60 minutes per new scene.
           </p>
         </div>
       </div>
     </div>
 
-    <!-- Results Grids-->
-    <div class="columns is-centered" style="margin-top: 2rem;">
+    <!-- Qualitative results -->
+    <div class="columns is-centered" style="margin-top: 1rem;">
       <div class="column is-four-fifths">
 
         <div class="figure-constrained">
-          <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 3.</strong> Segmentation results on the ScanNet++ dataset.
-          </p>
+          <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="figure-constrained">
-          <img src="static/images/benchmarking_grid.png" alt="Qualitative comparison on LERF_OVS" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 4.</strong> Qualitative comparison of results on the LERF_OVS dataset.
-          </p>
+          <img src="static/images/benchmarking_grid.png" alt="Qualitative comparison on LERF-OVS" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="figure-constrained">
-          <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 5.</strong> Segmentation results on the uCO3D dataset.
-          </p>
+          <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="figure-constrained">
-          <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-soft);">
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 6.</strong> Segmentation results on the SPIn-NeRF dataset.
-          </p>
+          <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="figure-constrained">
-          <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft);">
-            <img src="./static/images/nvos1.png" alt="Top half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
-            <img src="./static/images/nvos2.png" alt="Bottom half of NVOS T-Rex results" style="width: 100%; height: auto; display: block;">
+          <div style="display: flex; flex-direction: column; border-radius: 10px; overflow: hidden;">
+            <img src="./static/images/nvos1.png" alt="NVOS results" style="width: 100%; height: auto; display: block;">
+            <img src="./static/images/nvos2.png" alt="NVOS spatial reasoning results" style="width: 100%; height: auto; display: block;">
           </div>
-          <p class="figure-caption has-text-centered">
-            <strong>Figure 7.</strong> Full array of results on the NVOS T-Rex scene. The bottom panel showcases TrianguLang's spatial reasoning ability, achieved through simple text modifiers.
-          </p>
         </div>
 
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== INTERACTIVE 3D VIEWER (WIP) ===== -->
+<section class="section wip" id="interactive">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Interactive Demo</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div style="background: #f5f5f5; border: 2px dashed #ccc; border-radius: 10px; min-height: 500px; display: flex; align-items: center; justify-content: center; color: #999; font-style: italic; text-align: center; padding: 2rem;">
+          Interactive 3D viewer coming soon.<br>
+          Type a query to highlight objects in the scene.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TSDF MESH RECONSTRUCTION (WIP) ===== -->
+<section class="section wip" id="tsdf">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">3D Reconstruction</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            TrianguLang's predicted depth and segmentation masks can be fused into a TSDF volume to produce watertight mesh reconstructions of queried objects. Select an object by text, and explore the extracted 3D mesh below.
+          </p>
+        </div>
+        <div style="background: #f5f5f5; border: 2px dashed #ccc; border-radius: 10px; min-height: 500px; display: flex; align-items: center; justify-content: center; color: #999; font-style: italic; text-align: center; padding: 2rem;">
+          TSDF mesh viewer coming soon.<br>
+          Rotate, zoom, and inspect reconstructed object meshes.
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== CITATION ===== -->
 <section class="section" id="citation">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Citation</h2>
+    <h2 class="title is-3 has-text-centered">Citation</h2>
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <p style="font-size: 0.95rem; color: var(--text-mid); margin-bottom: 1rem; text-align: center;">
-          If you find this work useful, please consider citing:
-        </p>
         <div class="citation-block">
           <button class="copy-btn" onclick="copyCitation()">Copy</button>
-<pre style="margin: 0; white-space: pre; color: #334155;">@article{grant2026triangulang,
-  title     = {TrianguLang: Geometry-Aware Semantic Consensus
-               for Pose-Free 3D Localization},
-  author    = {Grant, Bryce and Rothenberg, Aryeh and
-               Banerjee, Atri and Wang, Peng},
-  journal   = {arXiv preprint},
-  year      = {2026}
+<pre style="margin: 0; white-space: pre;">@misc{grant2026triangulanggeometryawaresemanticconsensus,
+      title={TrianguLang: Geometry-Aware Semantic Consensus for Pose-Free 3D Localization},
+      author={Bryce Grant and Aryeh Rothenberg and Atri Banerjee and Peng Wang},
+      year={2026},
+      eprint={2603.08096},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2603.08096},
 }</pre>
         </div>
       </div>
@@ -408,35 +486,26 @@
   </div>
 </section>
 
-<!-- ===== ACKNOWLEDGEMENTS ===== -->
-<section class="section section-alt" id="acknowledgements">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 section-title has-text-centered">Acknowledgements</h2>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
     <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div class="content has-text-justified" style="font-size: 1.0rem; line-height: 1.8; color: var(--text-mid);">
-          <p>
-            This work was funded by NSF. Compute resources provided by NVIDIA.
-          </p>
-          <p style="font-size: 0.88rem; color: var(--text-light);">
-            Website template adapted from <a href="https://nerfies.github.io" target="_blank">Nerfies</a>.
-          </p>
+      <div class="column is-8">
+        <div class="content has-text-centered" style="font-size: 0.88rem; color: #888;">
+          <p>This work was funded by NSF. Compute resources provided by NVIDIA.</p>
+          <p>Website template adapted from <a href="https://nerfies.github.io" target="_blank">Nerfies</a>.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 1.5rem;">
-  <div class="container is-max-desktop has-text-centered" style="font-size: 0.85rem; color: var(--text-light);">
-    <p>TrianguLang &middot; Case Western Reserve University</p>
   </div>
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
 <script defer src="./static/js/fontawesome.all.min.js"></script>
 <script>
+  // Show WIP sections when ?dev is in the URL
+  if (location.search.includes('dev')) document.body.classList.add('show-wip');
+
   document.addEventListener('DOMContentLoaded', () => {
     const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
     $navbarBurgers.forEach(el => {

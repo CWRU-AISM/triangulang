@@ -1,0 +1,149 @@
+% \documentclass[runningheads]{llncs}
+\documentclass{llncs}
+
+% ---------------------------------------------------------------
+
+\usepackage{eccv}
+
+% OPTIONAL: Un-comment the following line for a version which is easier to read on small portrait-orientation screens (e.g., mobile phones, or beside other windows)
+%\usepackage[mobile]{eccv}
+
+
+% ---------------------------------------------------------------
+% Other packages
+% Commonly used abbreviations (\eg, \ie, \etc, \cf, \etal, etc.)
+\usepackage{eccvabbrv}
+
+% Include other packages here, before hyperref.
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{microtype} % added
+\usepackage{subcaption} % added
+\usepackage{amsfonts} % added
+\usepackage[colorinlistoftodos]{todonotes} % added
+
+% The "axessiblity" package can be found at: https://ctan.org/pkg/axessibility?lang=en
+\usepackage[accsupp]{axessibility}  % Improves PDF readability for those with disabilities.
+
+
+% ---------------------------------------------------------------
+% Hyperref package
+
+% It is strongly recommended to use hyperref, especially for the review version.
+% Please disable hyperref *only* if you encounter grave issues.
+% hyperref with option pagebackref eases the reviewers' job, but should be disabled for the final version.
+%
+% If you comment hyperref and then uncomment it, you should delete
+% main.aux before re-running LaTeX.
+% (Or just hit 'q' on the first LaTeX run, let it finish, and you
+%  should be clear).
+
+% TODO FINAL: Comment out the following line for the camera-ready version
+% \usepackage[pagebackref,breaklinks,colorlinks,citecolor=eccvblue]{hyperref}
+% TODO FINAL: Un-comment the following line for the camera-ready version
+\usepackage{hyperref}
+
+% Support for ORCID icon
+\usepackage{orcidlink}
+\usepackage{enumitem} % added
+
+% all these added from ICML version
+\usepackage{mathtools}
+% \usepackage{amsthm}
+\usepackage{multirow}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\graphicspath{{figures/}}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit, backgrounds, calc}
+
+
+
+
+\begin{document}
+
+% ---------------------------------------------------------------
+% TODO REVIEW: Replace with your title
+\title{TrianguLang: Geometry-Aware Semantic Consensus for Pose-Free 3D Localization} 
+
+% TODO REVIEW: If the paper title is too long for the running head, you can set an abbreviated paper title here. If not, comment out.
+\titlerunning{TrianguLang}
+
+% TODO FINAL: Replace with your author list. 
+% Include the authors' OCRID for the camera-ready version, if at all possible.
+\author{Bryce Grant\inst{1} \and
+Aryeh Rothenberg\inst{1} \and Atri Banerjee\inst{1} \and Peng Wang\inst{1}}
+
+% TODO FINAL: Replace with an abbreviated list of authors.
+\authorrunning{B. Grant et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+
+% TODO FINAL: Replace with your institution list.
+\institute{Case Western Reserve University, Cleveland, OH, USA\\
+\email{\{bag100, pxw206\}@case.edu}}
+
+\maketitle
+
+
+\begin{abstract}
+ \input{sections/abstract}
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:introduction}
+\input{sections/introduction}
+
+\section{Related Works}
+\label{sec:related}
+\input{sections/related}
+
+\section{Method}
+\label{sec:method}
+\input{sections/method}
+
+\section{Experiments}
+\input{sections/experiments}
+
+\section{Conclusion}
+\input{sections/conclusion}
+
+
+
+
+% Checklist for ECCV formatting correctness
+%\begin{itemize}
+%\item I have removed all \verb| \vspace| and \verb|\hspace|  commands from my paper.
+%\item I have not used \verb|\cite| command in the abstract.
+%\item I have entered a correct \verb|\titlerunning{}| command and selected a meaningful short name for the paper.
+%\item I have used the same name spelling in all my papers accepted to ECCV and ECCV Workshops.
+%\item I have added acknowledgments without a section number, e.g. using the \verb|\section*%{}| command.
+%\item Excluding references and acknowledgments, my paper is no longer than 14 pages.
+%\item I have not decreased the font size of any part of the paper (except tables) to fit into 14 pages, I understand Springer editors will remove such commands.
+%\end{itemize}
+
+
+%\clearpage  % TODO FINAL: This \clearpage needs to be removed from both review and camera-ready versions.
+
+%\section*{Acknowledgements}
+%Please insert your acknowledgments here.
+
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+
+% TrianguLang APPENDIX
+
+\appendix
+\section{Appendix}
+\label{app}
+\input{sections/appendix}
+
+\end{document}
