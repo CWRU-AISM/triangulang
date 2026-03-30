@@ -1,2 +1,0 @@
-splat_viewer/*.splat filter=lfs diff=lfs merge=lfs -text
-splat_viewer/*_masks.json filter=lfs diff=lfs merge=lfs -text
