@@ -795,7 +795,25 @@ async function main() {
 
     const rowLength = 3 * 4 + 3 * 4 + 4 + 4;
     const reader = req.body.getReader();
-    let splatData = new Uint8Array(req.headers.get("content-length"));
+    let contentLength = parseInt(req.headers.get("content-length"), 10);
+    if (!contentLength || isNaN(contentLength)) {
+        // If no content-length, read entire response into memory first
+        const chunks = [];
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+        }
+        const totalLen = chunks.reduce((acc, c) => acc + c.length, 0);
+        const fullData = new Uint8Array(totalLen);
+        let off = 0;
+        for (const c of chunks) { fullData.set(c, off); off += c.length; }
+        contentLength = totalLen;
+        // Re-create a readable stream from the data
+        var _fullDataUsed = false;
+        var _fullData = fullData;
+    }
+    let splatData = new Uint8Array(contentLength);
     window._splatDataRef = splatData;
 
     const downsample =
@@ -1513,21 +1531,28 @@ async function main() {
     let lastVertexCount = -1;
     let stopLoading = false;
 
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done || stopLoading) break;
+    if (typeof _fullData !== 'undefined' && _fullData) {
+        // Data was already fully read (no content-length case)
+        splatData.set(_fullData);
+        bytesRead = _fullData.length;
+        _fullData = null;
+    } else {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done || stopLoading) break;
 
-        splatData.set(value, bytesRead);
-        bytesRead += value.length;
+            splatData.set(value, bytesRead);
+            bytesRead += value.length;
 
-        if (vertexCount > lastVertexCount) {
-            if (!isPly(splatData)) {
-                worker.postMessage({
-                    buffer: splatData.buffer,
-                    vertexCount: Math.floor(bytesRead / rowLength),
-                });
+            if (vertexCount > lastVertexCount) {
+                if (!isPly(splatData)) {
+                    worker.postMessage({
+                        buffer: splatData.buffer,
+                        vertexCount: Math.floor(bytesRead / rowLength),
+                    });
+                }
+                lastVertexCount = vertexCount;
             }
-            lastVertexCount = vertexCount;
         }
     }
     if (!stopLoading) {
