@@ -75,10 +75,9 @@
     <div id="mainNavbar" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#interactive">Demo</a>
         <a class="navbar-item" href="#method">Method</a>
         <a class="navbar-item" href="#results">Results</a>
-        <a class="navbar-item wip" href="#interactive">Demo</a>
-        <a class="navbar-item wip" href="#tsdf">3D Viewer</a>
         <a class="navbar-item" href="#citation">Citation</a>
       </div>
     </div>
@@ -133,14 +132,15 @@
                 </a>
               </span>
               <span class="link-block">
-                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
+                <a href="https://github.com/bryceag11/triangulang"
+                   class="external-link button is-normal is-rounded is-dark" target="_blank">
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
-                  <span class="coming-soon-badge">Coming Soon</span>
                 </a>
               </span>
               <span class="link-block">
-                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
+                <a href="https://huggingface.co/bag100/triangulang"
+                   class="external-link button is-normal is-rounded is-dark" target="_blank">
                   <span class="icon">
                     <svg class="hf-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 88" fill="none">
                       <path fill="#FFD21E" d="M47.21 76.5a34.75 34.75 0 1 0 0-69.5 34.75 34.75 0 0 0 0 69.5Z"/>
@@ -156,7 +156,6 @@
                     </svg>
                   </span>
                   <span>Checkpoints</span>
-                  <span class="coming-soon-badge">Coming Soon</span>
                 </a>
               </span>
               <span class="link-block">
@@ -194,6 +193,24 @@
             enabling practical deployment for interactive robotics and AR applications.
           </p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTERACTIVE 3D VIEWER ===== -->
+<section class="section" id="interactive">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">TrianguLang in the Wild</h2>
+    <p class="subtitle has-text-centered" style="margin-bottom: 1.5rem;">
+      Explore Gaussian splat reconstructions and highlight objects by text query. Select a scene, click an object name to see TrianguLang's 3D relevancy overlay. Use mouse to orbit and scroll to zoom.
+    </p>
+
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <iframe src="./splat_viewer/viewer.html"
+          style="width: 100%; height: 700px; border: none; border-radius: 12px; background: #000;">
+        </iframe>
       </div>
     </div>
   </div>
@@ -432,41 +449,6 @@
   </div>
 </section>
 
-<!-- ===== INTERACTIVE 3D VIEWER (WIP) ===== -->
-<section class="section wip" id="interactive">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Interactive Demo</h2>
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div style="background: #f5f5f5; border: 2px dashed #ccc; border-radius: 10px; min-height: 500px; display: flex; align-items: center; justify-content: center; color: #999; font-style: italic; text-align: center; padding: 2rem;">
-          Interactive 3D viewer coming soon.<br>
-          Type a query to highlight objects in the scene.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== TSDF MESH RECONSTRUCTION (WIP) ===== -->
-<section class="section wip" id="tsdf">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">3D Reconstruction</h2>
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div class="content has-text-justified">
-          <p>
-            TrianguLang's predicted depth and segmentation masks can be fused into a TSDF volume to produce watertight mesh reconstructions of queried objects. Select an object by text, and explore the extracted 3D mesh below.
-          </p>
-        </div>
-        <div style="background: #f5f5f5; border: 2px dashed #ccc; border-radius: 10px; min-height: 500px; display: flex; align-items: center; justify-content: center; color: #999; font-style: italic; text-align: center; padding: 2rem;">
-          TSDF mesh viewer coming soon.<br>
-          Rotate, zoom, and inspect reconstructed object meshes.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== CITATION ===== -->
 <section class="section" id="citation">
   <div class="container is-max-desktop">
@@ -506,6 +488,9 @@
 
 <!-- ===== SCRIPTS ===== -->
 <script defer src="./static/js/fontawesome.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/controls/OrbitControls.js"></script>
+<script src="./static/js/splat-viewer.js"></script>
 <script>
   // Show WIP sections when ?dev is in the URL
   if (location.search.includes('dev')) document.body.classList.add('show-wip');
@@ -529,6 +514,133 @@
       setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
     });
   }
+
+  // ===== Interactive Viewer Setup =====
+  const SCENE_CONFIGS = {
+    scannetpp_kitchen: {
+      dataUrl: './static/data/scannetpp_kitchen/scene.bin',
+      masksUrl: './static/data/scannetpp_kitchen/masks.json',
+      pointSize: 0.003,
+      label: 'Kitchen (ScanNet++)',
+      queries: ['refrigerator', 'stove', 'microwave', 'chair', 'table', 'cabinet',
+                'nearest chair', 'farthest chair', 'leftmost chair'],
+    },
+    scannetpp_office: {
+      dataUrl: './static/data/scannetpp_office/scene.bin',
+      masksUrl: './static/data/scannetpp_office/masks.json',
+      pointSize: 0.004,
+      label: 'Office (ScanNet++)',
+      queries: ['office chair', 'table', 'whiteboard', 'monitor', 'door', 'ceiling lamp',
+                'nearest office chair', 'leftmost monitor'],
+    },
+    lerf_figurines: {
+      dataUrl: './static/data/lerf_figurines/scene.bin',
+      masksUrl: './static/data/lerf_figurines/masks.json',
+      pointSize: 0.003,
+      label: 'Figurines (LERF)',
+      queries: ['yellow dog', 'rabbit', 'pikachu', 'rubber duck', 'toy chair', 'apple'],
+    },
+    lerf_kitchen: {
+      dataUrl: './static/data/lerf_kitchen/scene.bin',
+      masksUrl: './static/data/lerf_kitchen/masks.json',
+      pointSize: 0.003,
+      label: 'Kitchen (LERF)',
+      queries: ['pot', 'fridge', 'spatula', 'knife', 'ketchup', 'bowl', 'sink'],
+    },
+    uco3d_motorcycle: {
+      dataUrl: './static/data/uco3d_motorcycle/scene.bin',
+      masksUrl: './static/data/uco3d_motorcycle/masks.json',
+      pointSize: 0.004,
+      label: 'Motorcycle (UCO3D)',
+      queries: ['motorcycle', 'wheel', 'seat', 'handlebar'],
+    },
+    uco3d_guitar: {
+      dataUrl: './static/data/uco3d_guitar/scene.bin',
+      masksUrl: './static/data/uco3d_guitar/masks.json',
+      pointSize: 0.004,
+      label: 'Guitar (UCO3D)',
+      queries: ['guitar', 'neck', 'body', 'strings'],
+    },
+  };
+
+  let viewer = null;
+  let currentSceneName = null;
+
+  async function initViewer() {
+    const container = document.getElementById('viewer-container');
+    if (!container) return;
+    viewer = new SplatViewer(container);
+  }
+
+  async function selectScene(name, btnEl) {
+    if (!viewer) await initViewer();
+
+    const config = SCENE_CONFIGS[name];
+    if (!config) return;
+
+    // Update button states
+    document.querySelectorAll('#scene-buttons .button').forEach(btn => {
+      btn.classList.remove('is-info');
+    });
+    if (btnEl) btnEl.classList.add('is-info');
+
+    // Show loading
+    const loading = document.getElementById('viewer-loading');
+    if (loading) loading.style.display = 'block';
+
+    try {
+      if (!viewer.scenes[name]) {
+        await viewer.loadScene(name, config);
+      }
+      viewer.switchScene(name);
+      currentSceneName = name;
+
+      // Update query buttons
+      const btnContainer = document.getElementById('query-buttons');
+      btnContainer.innerHTML = '';
+      config.queries.forEach(q => {
+        const btn = document.createElement('button');
+        btn.className = 'button is-small is-rounded is-light';
+        btn.textContent = q;
+        btn.onclick = () => {
+          document.querySelectorAll('#query-buttons .button').forEach(b => b.classList.remove('is-warning'));
+          btn.classList.add('is-warning');
+          viewer.applyQuery(q);
+        };
+        btnContainer.appendChild(btn);
+      });
+    } catch (e) {
+      console.error('Failed to load scene:', e);
+    }
+
+    if (loading) loading.style.display = 'none';
+  }
+
+  function applyQueryFromInput() {
+    const input = document.getElementById('query-input');
+    if (viewer && input.value.trim()) {
+      viewer.applyQuery(input.value.trim());
+    }
+  }
+
+  function clearQuery() {
+    document.getElementById('query-input').value = '';
+    document.querySelectorAll('#query-buttons .button').forEach(b => b.classList.remove('is-warning'));
+    if (viewer) viewer.applyQuery(null);
+  }
+
+  function setViewMode(mode) {
+    if (viewer) viewer.setViewMode(mode);
+  }
+
+  // Auto-load first scene
+  document.addEventListener('DOMContentLoaded', () => {
+    // Small delay to let Three.js load
+    setTimeout(() => {
+      const firstBtn = document.querySelector('#scene-buttons .button');
+      selectScene('scannetpp_office', firstBtn);
+    }, 500);
+  });
 </script>
 
 </body>

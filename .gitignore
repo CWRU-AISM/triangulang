@@ -9,3 +9,11 @@ INTERACTIVE_VIEWER.md
 # Cloned reference repos (not part of the project)
 gauss_gym/
 nerfies-ref/
+
+# Dev/test files
+test.html
+serve.py
+proof_screenshots/
+static/js/antimatter-splat.html
+static/js/antimatter-splat.js
+static/js/splat-viewer.js
