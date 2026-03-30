@@ -158,13 +158,6 @@
                   <span>Checkpoints</span>
                 </a>
               </span>
-              <span class="link-block">
-                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
-                  <span class="icon"><i class="fas fa-play"></i></span>
-                  <span>Demo</span>
-                  <span class="coming-soon-badge">Coming Soon</span>
-                </a>
-              </span>
             </div>
           </div>
 
@@ -423,18 +416,30 @@
 
         <div class="figure-constrained">
           <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            Text-guided segmentation on ScanNet++. Left-to-right: RGB input, DA3 depth, ground truth, TrianguLang prediction.
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/benchmarking_grid.png" alt="Qualitative comparison on LERF-OVS" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            Qualitative comparison on LERF-OVS. LERF and LangSplat-V2 produce diffuse activations while TrianguLang tightly focuses on the target (~58ms vs. 10&ndash;45 min).
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            Cross-dataset transfer on uCO3D (75.7% mIoU, more than doubling MV-SAM's 32.2%).
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            Segmentation on SPIn-NeRF (90.7% mean IoU). TrianguLang produces view-consistent masks using only text prompts.
+          </p>
         </div>
 
         <div class="figure-constrained">
@@ -442,6 +447,9 @@
             <img src="./static/images/nvos1.png" alt="NVOS results" style="width: 100%; height: auto; display: block;">
             <img src="./static/images/nvos2.png" alt="NVOS spatial reasoning results" style="width: 100%; height: auto; display: block;">
           </div>
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            Spatial disambiguation on NVOS. &ldquo;dino&rdquo; (97.6% IoU) vs. &ldquo;leftmost dino&rdquo; (95.8% IoU) using depth-derived spatial reasoning.
+          </p>
         </div>
 
       </div>

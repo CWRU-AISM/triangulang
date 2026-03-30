@@ -644,6 +644,7 @@ function createWorker(self) {
             buffer = e.data.buffer;
             lastVertexCount = 0; // Force texture regeneration on next sort
             vertexCount = e.data.vertexCount;
+            if (viewProj) runSort(viewProj); // Immediately re-sort with new buffer
         } else if (e.data.vertexCount) {
             vertexCount = e.data.vertexCount;
         } else if (e.data.view) {
@@ -984,17 +985,18 @@ async function main() {
                     count++;
                 }
                 cx /= count; cy /= count; cz /= count;
-                // Compute extent
-                let maxDist = 0;
+                // Compute extent using 90th percentile (robust to outliers)
+                let dists = [];
                 for (let i = 0; i < N; i += step) {
                     const dx = dv.getFloat32(i * rowLen, true) - cx;
                     const dy = dv.getFloat32(i * rowLen + 4, true) - cy;
                     const dz = dv.getFloat32(i * rowLen + 8, true) - cz;
-                    const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                    if (d > maxDist) maxDist = d;
+                    dists.push(Math.sqrt(dx*dx + dy*dy + dz*dz));
                 }
-                // Place camera at 0.5x the extent (inside the scene)
-                const dist = Math.max(0.2, maxDist * 0.4);
+                dists.sort((a, b) => a - b);
+                const maxDist = dists[Math.floor(dists.length * 0.9)];
+                // Place camera at ~0.6x extent - close enough to see detail, far enough to see scene
+                const dist = Math.max(0.3, maxDist * 0.6);
                 viewMatrix = [
                     1, 0, 0, 0,
                     0, 1, 0, 0,
@@ -1004,8 +1006,8 @@ async function main() {
                 window._sceneExtent = maxDist;
                 window._sceneCenter = [cx, cy, cz];
                 window._orbitDist = dist;
-                window._minDist = dist * 0.05;
-                window._maxDist = dist * 3;
+                window._minDist = dist * 0.02;
+                window._maxDist = dist * 5;
                 console.log("Auto-fit camera: center=(" + cx.toFixed(2) + "," + cy.toFixed(2) + "," + cz.toFixed(2) + ") dist=" + dist.toFixed(2) + " extent=" + maxDist.toFixed(3));
             }
         }
@@ -1548,8 +1550,13 @@ window.addEventListener('message', (e) => {
         const mode = e.data.mode || 'relevancy'; // 'relevancy' or 'mask'
         if (!window._splatDataRef || !window._workerRef) return;
 
-        // Work on a COPY so the original is preserved
-        const splatData = new Uint8Array(window._splatDataRef);
+        // Store the ORIGINAL unmodified data on first use
+        if (!window._origSplatData) {
+            window._origSplatData = new Uint8Array(window._splatDataRef);
+        }
+
+        // Always work from the original, never from a previously modified copy
+        const splatData = new Uint8Array(window._origSplatData);
         const rowLength = 32;
         const N = splatData.length / rowLength;
 
@@ -1558,21 +1565,12 @@ window.addEventListener('message', (e) => {
             return;
         }
 
-        // Store original colors on first mask application
-        if (!window._origColors) {
-            window._origColors = new Uint8Array(N * 4);
-            for (let i = 0; i < N; i++) {
-                window._origColors[i*4+0] = splatData[i*rowLength+24];
-                window._origColors[i*4+1] = splatData[i*rowLength+25];
-                window._origColors[i*4+2] = splatData[i*rowLength+26];
-                window._origColors[i*4+3] = splatData[i*rowLength+27];
-            }
-        }
-
-        // Turbo colormap LUT (sampled at 8 key points)
+        // Full turbo colormap LUT (16 samples for smooth gradients)
         const TURBO = [
-            [48,18,59], [70,130,180], [70,195,155], [130,235,95],
-            [200,235,55], [240,185,45], [230,120,50], [180,40,50]
+            [48,18,59],[67,62,133],[75,107,183],[68,148,196],
+            [62,188,173],[74,216,130],[120,236,85],[172,244,47],
+            [213,237,32],[245,212,24],[253,178,22],[248,140,28],
+            [235,100,38],[214,62,42],[183,34,43],[144,12,34]
         ];
         function turbo(t) {
             t = Math.max(0, Math.min(1, t));
@@ -1586,42 +1584,63 @@ window.addEventListener('message', (e) => {
             ];
         }
 
+        // Find the max relevancy and percentile for clipping
+        let maxRel = 0;
+        let relValues = [];
         for (let i = 0; i < N; i++) {
-            const rel = mask[i] / 255.0;
+            const v = mask[i];
+            if (v > maxRel) maxRel = v;
+            if (v > 5) relValues.push(v);
+        }
+        // Clip at 95th percentile of nonzero values for better contrast
+        relValues.sort((a, b) => a - b);
+        const clipHigh = relValues.length > 0 ? relValues[Math.floor(relValues.length * 0.95)] : maxRel;
+        const clipLow = relValues.length > 0 ? relValues[Math.floor(relValues.length * 0.15)] : 0;
+        const clipRange = Math.max(clipHigh - clipLow, 1);
+        console.log(`Relevancy stats: max=${maxRel}, clip=[${clipLow},${clipHigh}], nonzero=${relValues.length}/${N}`);
+
+        const gamma = 0.45; // Boost weak signals
+
+        for (let i = 0; i < N; i++) {
+            const raw = mask[i];
             const off = i * rowLength;
-            const r0 = window._origColors[i*4+0];
-            const g0 = window._origColors[i*4+1];
-            const b0 = window._origColors[i*4+2];
-            const a0 = window._origColors[i*4+3];
+            const r0 = splatData[off+24];
+            const g0 = splatData[off+25];
+            const b0 = splatData[off+26];
+            const a0 = splatData[off+27];
 
             if (mode === 'relevancy') {
-                // Continuous heatmap: blend turbo colormap with original
-                if (rel > 0.08) {
+                if (raw > clipLow) {
+                    // Normalize to clipped range and apply gamma
+                    let rel = Math.min((raw - clipLow) / clipRange, 1.0);
+                    rel = Math.pow(rel, gamma);
                     const tc = turbo(rel);
-                    const blend = Math.min(rel * 1.2, 0.85);
-                    splatData[off+24] = Math.round(r0 * (1-blend) + tc[0] * blend);
-                    splatData[off+25] = Math.round(g0 * (1-blend) + tc[1] * blend);
-                    splatData[off+26] = Math.round(b0 * (1-blend) + tc[2] * blend);
+                    // Overlay: show original image underneath with turbo on top
+                    const overlay = Math.min(rel * 1.3, 0.9); // how much turbo vs original
+                    splatData[off+24] = Math.min(255, Math.round(r0 * (1-overlay) + tc[0] * overlay));
+                    splatData[off+25] = Math.min(255, Math.round(g0 * (1-overlay) + tc[1] * overlay));
+                    splatData[off+26] = Math.min(255, Math.round(b0 * (1-overlay) + tc[2] * overlay));
                     splatData[off+27] = a0;
                 } else {
-                    splatData[off+24] = Math.round(r0 * 0.12);
-                    splatData[off+25] = Math.round(g0 * 0.12);
-                    splatData[off+26] = Math.round(b0 * 0.12);
-                    splatData[off+27] = Math.round(a0 * 0.4);
+                    // Darken non-relevant areas but keep some image visible
+                    splatData[off+24] = Math.round(r0 * 0.15);
+                    splatData[off+25] = Math.round(g0 * 0.15);
+                    splatData[off+26] = Math.round(b0 * 0.15);
+                    splatData[off+27] = Math.round(a0 * 0.35);
                 }
             } else {
-                // Binary mask: threshold at 0.3
+                // Binary mask mode
+                const rel = raw / 255.0;
                 if (rel > 0.3) {
-                    // Highlight with cyan tint
-                    splatData[off+24] = Math.round(r0 * 0.4 + 50);
-                    splatData[off+25] = Math.round(g0 * 0.4 + 200);
-                    splatData[off+26] = Math.round(b0 * 0.3 + 255 * 0.7);
+                    splatData[off+24] = Math.min(255, Math.round(r0 * 0.3 + 60));
+                    splatData[off+25] = Math.min(255, Math.round(g0 * 0.3 + 210));
+                    splatData[off+26] = Math.min(255, Math.round(b0 * 0.2 + 255 * 0.8));
                     splatData[off+27] = a0;
                 } else {
-                    splatData[off+24] = Math.round(r0 * 0.1);
-                    splatData[off+25] = Math.round(g0 * 0.1);
-                    splatData[off+26] = Math.round(b0 * 0.1);
-                    splatData[off+27] = Math.round(a0 * 0.3);
+                    splatData[off+24] = Math.round(r0 * 0.08);
+                    splatData[off+25] = Math.round(g0 * 0.08);
+                    splatData[off+26] = Math.round(b0 * 0.08);
+                    splatData[off+27] = Math.round(a0 * 0.25);
                 }
             }
         }
@@ -1637,14 +1656,14 @@ window.addEventListener('message', (e) => {
     }
 
     if (e.data.type === 'clearMask') {
-        if (!window._splatDataRef || !window._workerRef) return;
-        // Re-send original unmodified data
-        const copy = new Uint8Array(window._splatDataRef);
+        if (!window._workerRef) return;
+        const orig = window._origSplatData || window._splatDataRef;
+        if (!orig) return;
+        const copy = new Uint8Array(orig);
         window._workerRef.postMessage({
             buffer: copy.buffer,
             vertexCount: copy.length / 32,
         });
-        setTimeout(() => { if (window._forceResort) window._forceResort(); }, 200);
         console.log('Cleared mask overlay');
     }
 });
