@@ -795,25 +795,17 @@ async function main() {
 
     const rowLength = 3 * 4 + 3 * 4 + 4 + 4;
     const reader = req.body.getReader();
-    let contentLength = parseInt(req.headers.get("content-length"), 10);
-    if (!contentLength || isNaN(contentLength)) {
-        // If no content-length, read entire response into memory first
-        const chunks = [];
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            chunks.push(value);
-        }
-        const totalLen = chunks.reduce((acc, c) => acc + c.length, 0);
-        const fullData = new Uint8Array(totalLen);
-        let off = 0;
-        for (const c of chunks) { fullData.set(c, off); off += c.length; }
-        contentLength = totalLen;
-        // Re-create a readable stream from the data
-        var _fullDataUsed = false;
-        var _fullData = fullData;
+    // Always read fully first for reliability (GitHub Pages, CDNs, etc.)
+    const chunks = [];
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
     }
-    let splatData = new Uint8Array(contentLength);
+    const totalBytes = chunks.reduce((acc, c) => acc + c.length, 0);
+    let splatData = new Uint8Array(totalBytes);
+    let off = 0;
+    for (const c of chunks) { splatData.set(c, off); off += c.length; }
     window._splatDataRef = splatData;
 
     const downsample =
@@ -1527,44 +1519,18 @@ async function main() {
         selectFile(e.dataTransfer.files[0]);
     });
 
-    let bytesRead = 0;
+    let bytesRead = splatData.length;
     let lastVertexCount = -1;
     let stopLoading = false;
 
-    if (typeof _fullData !== 'undefined' && _fullData) {
-        // Data was already fully read (no content-length case)
-        splatData.set(_fullData);
-        bytesRead = _fullData.length;
-        _fullData = null;
+    // Data is already fully loaded - send to worker
+    if (isPly(splatData)) {
+        worker.postMessage({ ply: splatData.buffer, save: false });
     } else {
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done || stopLoading) break;
-
-            splatData.set(value, bytesRead);
-            bytesRead += value.length;
-
-            if (vertexCount > lastVertexCount) {
-                if (!isPly(splatData)) {
-                    worker.postMessage({
-                        buffer: splatData.buffer,
-                        vertexCount: Math.floor(bytesRead / rowLength),
-                    });
-                }
-                lastVertexCount = vertexCount;
-            }
-        }
-    }
-    if (!stopLoading) {
-        if (isPly(splatData)) {
-            // ply file magic header means it should be handled differently
-            worker.postMessage({ ply: splatData.buffer, save: false });
-        } else {
-            worker.postMessage({
-                buffer: splatData.buffer,
-                vertexCount: Math.floor(bytesRead / rowLength),
-            });
-        }
+        worker.postMessage({
+            buffer: splatData.buffer,
+            vertexCount: Math.floor(bytesRead / rowLength),
+        });
     }
 }
 
