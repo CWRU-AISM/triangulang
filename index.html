@@ -158,13 +158,6 @@
                   <span>Checkpoints</span>
                 </a>
               </span>
-              <span class="link-block">
-                <a class="external-link button is-normal is-rounded is-dark" style="opacity: 0.6; pointer-events: none;">
-                  <span class="icon"><i class="fas fa-play"></i></span>
-                  <span>Demo</span>
-                  <span class="coming-soon-badge">Coming Soon</span>
-                </a>
-              </span>
             </div>
           </div>
 
@@ -423,18 +416,30 @@
 
         <div class="figure-constrained">
           <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            <b>Figure 1.</b> Text-guided segmentation on ScanNet++. Left-to-right: RGB input, DA3 depth estimate, ground truth mask, TrianguLang prediction. TrianguLang produces accurate masks from a single text query without per-scene optimization.
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/benchmarking_grid.png" alt="Qualitative comparison on LERF-OVS" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            <b>Figure 2.</b> Qualitative comparison on LERF-OVS scenes. LERF and LangSplat-V2 produce diffuse activations across the scene, while TrianguLang tightly focuses its relevancy map on the target object. TrianguLang runs ~58ms vs. 10&ndash;45 minutes for per-scene methods.
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            <b>Figure 3.</b> Cross-dataset transfer on uCO3D. TrianguLang trained on ScanNet++ generalizes to object-centric 360&deg; captures, achieving 75.7% mIoU&mdash;more than doubling MV-SAM's 32.2%.
+          </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 10px;">
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            <b>Figure 4.</b> Segmentation on SPIn-NeRF (90.7% mean IoU). Each row shows a different viewpoint: RGB, depth, ground truth, prediction, and overlay. TrianguLang produces view-consistent masks using only text prompts without per-scene training.
+          </p>
         </div>
 
         <div class="figure-constrained">
@@ -442,6 +447,9 @@
             <img src="./static/images/nvos1.png" alt="NVOS results" style="width: 100%; height: auto; display: block;">
             <img src="./static/images/nvos2.png" alt="NVOS spatial reasoning results" style="width: 100%; height: auto; display: block;">
           </div>
+          <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
+            <b>Figure 5.</b> Spatial disambiguation on NVOS. <b>Top:</b> &ldquo;dino&rdquo; (97.6% IoU) segments the dominant triceratops skull. <b>Bottom:</b> &ldquo;leftmost dino&rdquo; (95.8% IoU) uses spatial reasoning to select only the left specimen by computing 3D centroids via depth unprojection.
+          </p>
         </div>
 
       </div>
