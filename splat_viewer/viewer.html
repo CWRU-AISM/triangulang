@@ -71,6 +71,21 @@
   <div class="scene-card" onclick="loadScene('lerf_figurines',this)">
     <div class="label">Figurines</div><div class="sub">LERF-OVS</div>
   </div>
+  <div style="width:2px;background:#333;margin:0 4px"></div>
+  <div class="scene-card" onclick="loadScene('scannetpp_classroom',this)">
+    <div class="label">Classroom</div><div class="sub">ScanNet++</div>
+  </div>
+  <div class="scene-card" onclick="loadScene('scannetpp_lounge',this)">
+    <div class="label">Lounge</div><div class="sub">ScanNet++</div>
+  </div>
+  <div class="scene-card" onclick="loadScene('scannetpp_open_lab',this)">
+    <div class="label">Open Lab</div><div class="sub">ScanNet++</div>
+  </div>
+  <div style="margin-left:auto;color:#fff;font-size:11px;font-family:monospace;line-height:1.4;text-align:right;padding:4px 0">
+    Arrows: move &nbsp; Shift+Arrows: up/down<br>
+    A/D: yaw &nbsp; W/S: pitch &nbsp; Q/E: roll<br>
+    Scroll: zoom &nbsp; Drag: orbit
+  </div>
 </div>
 
 <!-- Viewer -->
@@ -97,13 +112,37 @@ let maskData = {};
 let currentScene = null;
 let currentQuery = null;
 
+// Per-scene initial camera viewpoints (from training cameras, un-rotated frame)
+const SCENE_CAMERAS = {
+  'lerf_ramen': [-0.872169,0.176869,0.456113,0,0.266806,-0.60951,0.746533,0,0.410044,0.772797,0.484406,0,-0.342005,-0.039064,0.325453,1],
+  'lerf_kitchen': [0.900119,-0.300533,0.315382,0,0.345643,0.933329,-0.097099,0,-0.265174,0.19641,0.943984,0,-0.459133,0.024039,0.180389,1],
+  'lerf_teatime': [0.526698,0.706493,-0.472713,0.000000,-0.488943,0.706687,0.511398,0.000000,0.695359,-0.038222,0.717646,0.000000,0.086359,-1.088567,-0.763129,1.000000],
+  'lerf_figurines': [0.646539,0.217506,-0.731217,0.000000,-0.260507,0.963826,0.056358,0.000000,0.717024,0.154049,0.679813,0.000000,0.002291,-1.613269,1.703386,1.000000],
+  'scannetpp_classroom': [-0.984042,0.085999,-0.15577,0,-0.177334,-0.402208,0.898211,0,0.014594,0.911501,0.411039,0,6.034422,2.194499,0.964536,1],
+  'scannetpp_lounge': [-0.992271,-0.020062,-0.122462,0,-0.121253,-0.053193,0.991196,0,-0.026399,0.998383,0.05035,0,3.841069,1.172558,0.08212,1],
+  'scannetpp_open_lab': [0.240937,-0.187941,0.95217,0,0.970309,0.025218,-0.240549,0,0.021197,0.981857,0.188437,0,-8.145605,2.332071,0.929744,1],
+};
+
 async function loadScene(name, el) {
   document.querySelectorAll('.scene-card').forEach(c => c.classList.remove('active'));
   if (el) el.classList.add('active');
   currentScene = name;
   currentQuery = null;
 
-  document.getElementById('splat-frame').src = 'index.html?url=' + name + '.splat';
+  // LERF: use deployed splat files (filtered splatfacto, proven quality + masks)
+  // ScanNet++: use LangSplatV2-trained splats
+  const SCENE_FILES = {
+    'scannetpp_classroom': 'scannetpp_classroom_v2.splat',
+    'scannetpp_lounge': 'scannetpp_lounge_v2.splat',
+    'scannetpp_open_lab': 'scannetpp_open_lab_v2.splat',
+  };
+  // LERF scenes default to name + '.splat' (lerf_ramen.splat etc)
+  const file = SCENE_FILES[name] || (name + '.splat');
+  let url = 'index.html?url=' + file;
+  if (SCENE_CAMERAS[name]) {
+    url += '#' + encodeURIComponent(JSON.stringify(SCENE_CAMERAS[name]));
+  }
+  document.getElementById('splat-frame').src = url;
 
   const qbar = document.getElementById('query-bar');
   const qbtns = document.getElementById('query-buttons');
@@ -115,14 +154,18 @@ async function loadScene(name, el) {
     if (resp.ok) {
       maskData = await resp.json();
       qbar.style.display = 'flex';
-      for (const q of maskData.queries) {
+      const MAX_BUTTONS = 7;  // Show first N as buttons, rest are searchable only
+      for (let idx = 0; idx < maskData.queries.length; idx++) {
+        const q = maskData.queries[idx];
         const opt = document.createElement('option');
         opt.value = q.replace(/_/g, ' ');
         qlist.appendChild(opt);
-        const b = document.createElement('button');
-        b.textContent = q.replace(/_/g, ' ');
-        b.onclick = () => selectQuery(q, b);
-        qbtns.appendChild(b);
+        if (idx < MAX_BUTTONS) {
+          const b = document.createElement('button');
+          b.textContent = q.replace(/_/g, ' ');
+          b.onclick = () => selectQuery(q, b);
+          qbtns.appendChild(b);
+        }
       }
     } else { qbar.style.display = 'none'; maskData = {}; }
   } catch(e) { qbar.style.display = 'none'; maskData = {}; }
@@ -133,6 +176,8 @@ function selectQuery(query, btn) {
   if (btn) btn.classList.add('query-active');
   document.getElementById('query-input').value = query.replace(/_/g, ' ');
   highlightQuery(query);
+  // Re-focus iframe so keyboard controls work after selecting a query
+  setTimeout(() => document.getElementById('splat-frame').focus(), 300);
 }
 
 function applyQuery() {
@@ -148,6 +193,8 @@ function clearQuery() {
   currentQuery = null;
   document.querySelectorAll('#query-buttons button').forEach(b => b.classList.remove('query-active'));
   try { document.getElementById('splat-frame').contentWindow.postMessage({type:'clearMask'}, '*'); } catch(e) {}
+  // Re-focus iframe for keyboard controls
+  setTimeout(() => document.getElementById('splat-frame').focus(), 200);
 }
 
 function highlightQuery(query) {
@@ -171,6 +218,30 @@ function reapply() { if (currentQuery) highlightQuery(currentQuery); }
 
 window.addEventListener('DOMContentLoaded', () => {
   loadScene('lerf_ramen', document.querySelector('.scene-card'));
+});
+
+// Listen for viewMatrix from iframe (V key)
+window.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'viewMatrix') {
+    const scene = currentScene || 'unknown';
+    const text = "'" + scene + "': " + e.data.vm + ",";
+    navigator.clipboard.writeText(text).catch(() => {});
+    // Show a toast
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;color:#0f0;padding:16px 24px;border-radius:10px;z-index:9999;font-family:monospace;font-size:11px;max-width:90vw;word-break:break-all;border:1px solid #0f0';
+    toast.textContent = text;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+});
+
+// Auto-focus iframe on click and after scene load for keyboard controls
+document.getElementById('viewer-wrap').addEventListener('click', () => {
+  document.getElementById('splat-frame').focus();
+});
+// Also focus iframe when it finishes loading
+document.getElementById('splat-frame').addEventListener('load', () => {
+  setTimeout(() => document.getElementById('splat-frame').focus(), 500);
 });
 </script>
 </body>

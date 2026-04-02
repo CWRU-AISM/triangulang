@@ -773,12 +773,14 @@ function clampCamera(vm) {
     return vm;
 }
 let viewMatrix = defaultViewMatrix;
+let _hashCameraProvided = false;
 async function main() {
     let carousel = false;
     const params = new URLSearchParams(location.search);
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
+        _hashCameraProvided = true;
     } catch (err) {}
     const url = new URL(
         // "nike.splat",
@@ -923,6 +925,7 @@ async function main() {
         if (e.data.buffer) {
             splatData = new Uint8Array(e.data.buffer);
             window._splatDataRef = splatData;
+            window._origSplatData = null; // Clear stale mask overlay data
             if (e.data.save) {
                 const blob = new Blob([splatData.buffer], {
                     type: "application/octet-stream",
@@ -969,8 +972,8 @@ async function main() {
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
 
-            // Auto-fit camera on first load
-            if (!window._cameraFitted && vertexCount > 1000 && splatData.length > 0) {
+            // Auto-fit camera on first load (skip if camera provided via URL hash)
+            if (!window._cameraFitted && !_hashCameraProvided && vertexCount > 1000 && splatData.length > 0) {
                 window._cameraFitted = true;
                 const rowLen = 32;
                 const N = splatData.length / rowLen;
@@ -1036,12 +1039,13 @@ async function main() {
         }
         camid.innerText = "cam  " + currentCameraIndex;
         if (e.code == "KeyV") {
-            location.hash =
-                "#" +
-                JSON.stringify(
-                    viewMatrix.map((k) => Math.round(k * 100) / 100),
-                );
-            camid.innerText = "";
+            const vmStr = JSON.stringify(
+                viewMatrix.map((k) => Math.round(k * 1000000) / 1000000),
+            );
+            location.hash = "#" + vmStr;
+            // Post to parent so viewer.html can show it
+            try { window.parent.postMessage({type:'viewMatrix', vm: vmStr}, '*'); } catch(e) {}
+            camid.innerText = "Copied!";
         } else if (e.code === "KeyP") {
             carousel = true;
             camid.innerText = "";
@@ -1268,8 +1272,8 @@ async function main() {
             activeKeys.includes("ShiftRight");
 
         // Movement speed scaled for small scenes
-        const moveSpeed = window._sceneExtent ? window._sceneExtent * 0.02 : 0.01;
-        const rotSpeed = 0.003;
+        const moveSpeed = window._sceneExtent ? window._sceneExtent * 0.06 : 0.04;
+        const rotSpeed = 0.012;
 
         if (activeKeys.includes("ArrowUp")) {
             if (shiftKey) {
@@ -1622,11 +1626,11 @@ window.addEventListener('message', (e) => {
                     splatData[off+26] = Math.min(255, Math.round(b0 * (1-overlay) + tc[2] * overlay));
                     splatData[off+27] = a0;
                 } else {
-                    // Darken non-relevant areas but keep some image visible
-                    splatData[off+24] = Math.round(r0 * 0.15);
-                    splatData[off+25] = Math.round(g0 * 0.15);
-                    splatData[off+26] = Math.round(b0 * 0.15);
-                    splatData[off+27] = Math.round(a0 * 0.35);
+                    // Dim non-relevant areas but keep scene visible
+                    splatData[off+24] = Math.round(r0 * 0.35);
+                    splatData[off+25] = Math.round(g0 * 0.35);
+                    splatData[off+26] = Math.round(b0 * 0.35);
+                    splatData[off+27] = Math.round(a0 * 0.7);
                 }
             } else {
                 // Binary mask mode
