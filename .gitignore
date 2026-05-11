@@ -10,6 +10,9 @@ INTERACTIVE_VIEWER.md
 gauss_gym/
 nerfies-ref/
 
+# Large local-only files (symlinks to /data/... that don't exist on GitHub)
+splat_viewer/*.ply
+
 # Dev/test files
 test.html
 serve.py
