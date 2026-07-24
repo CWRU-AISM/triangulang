@@ -183,9 +183,9 @@
             We present TrianguLang, a feed-forward framework for 3D localization that requires no camera calibration at inference.
             Unlike prior methods that treat views independently, we introduce Geometry-Aware Semantic Attention (GASA), which utilizes predicted geometry to gate cross-view feature correspondence,
             suppressing semantically plausible but geometrically inconsistent matches without requiring ground-truth poses.
-            Validated on five benchmarks including ScanNet++ and uCO3D, TrianguLang achieves state-of-the-art feed-forward text-guided segmentation and localization,
-            reducing user effort from <i>O</i>(<i>N</i>) clicks to a single text query. The model processes each frame at 1008&times;1008 resolution in ~57ms
-            (~18 FPS) without optimization,
+            Validated on seven benchmarks including ScanNet++ and uCO3D, TrianguLang achieves state-of-the-art feed-forward text-guided segmentation and localization,
+            reducing user effort from <i>O</i>(<i>N</i>) clicks to a single text query. The model processes each frame at 1008&times;1008 resolution in ~58ms
+            (~17 FPS) without optimization,
             enabling practical deployment for interactive robotics and AR applications.
           </p>
         </div>
@@ -226,14 +226,14 @@
           <p>
             The pipeline composes two frozen foundation models with a lightweight trained decoder:
             <b>SAM3</b> (frozen, 848M) extracts text-conditioned semantic features,
-            <b>DA3-NESTED</b> (frozen, 1.4B) jointly estimates metric depth, intrinsics, and extrinsics from the input images, and
-            the <b>GASA decoder</b> (trained, 13.7M) fuses them with geometry-aware cross-view attention. Only 0.54% of the total parameters are trained.
+            <b>MapAnything</b> (frozen, 1.23B) jointly estimates metric depth, intrinsics, and extrinsics from the input images, and
+            the <b>GASA decoder</b>, together with a fine-tuned SAM3 pixel decoder and instance head (trained, 15.4M total), fuses them with geometry-aware cross-view attention. Only 0.74% of the 2.09B total parameters are trained. The geometry model is a swappable front-end &mdash; DA3-NESTED and &pi;<sup>3</sup> reach comparable accuracy.
           </p>
         </div>
 
         <!-- Architecture diagram -->
         <div class="figure-constrained">
-          <img src="static/images/architecture.png" alt="Overview of the TrianguLang architecture" style="width: 100%; height: auto; border-radius: 10px;">
+          <img src="static/images/architecture_v2.png" alt="Overview of the TrianguLang architecture" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="content has-text-justified">
@@ -241,13 +241,8 @@
             Standard cross-attention matches features by semantic similarity alone, producing false correspondences between visually similar but spatially distant regions (e.g. two identical mugs). GASA introduces a geometric veto: each token carries a 3D position from depth unprojection, and a learned distance kernel penalizes attention between tokens that are far apart in metric space. If two features look similar but are meters apart, the geometric bias suppresses that match.
           </p>
           <p>
-            We also replace standard 2D positional encodings with world-space positional encoding: each pixel is unprojected to 3D using DA3 depth and camera parameters, then encoded with sinusoidal functions. The same physical point gets the same embedding regardless of viewpoint.
+            We also replace standard 2D positional encodings with world-space positional encoding: each pixel is unprojected to 3D using the predicted depth and camera parameters, then encoded with sinusoidal functions. The same physical point gets the same embedding regardless of viewpoint.
           </p>
-        </div>
-
-        <!-- Decoder diagram -->
-        <div class="figure-constrained">
-          <img src="static/images/decoder.png" alt="Overview of the GASA decoder" style="width: 100%; height: auto; border-radius: 10px;">
         </div>
 
         <div class="content has-text-justified">
@@ -277,7 +272,10 @@
       <div class="column is-full-width">
         <div class="content has-text-justified">
           <p>
-            On ScanNet++, a single text query achieves <b>62.4% mIoU</b>, beating MV-SAM's 51.0% with 12 click prompts (+11.4 points). Cross-dataset transfer reveals the biggest gap: TrianguLang trained on ScanNet++ scores <b>75.7% mIoU</b> on uCO3D, more than doubling MV-SAM's 32.2%. On LERF-OVS, TrianguLang closely matches LangSplat-V2 (58.1% vs. 59.9% mIoU) while running <b>three orders of magnitude faster</b> (~58ms vs. 10-45 minutes of per-scene optimization).
+            On ScanNet++, a single text query achieves <b>62.4% mIoU</b>, beating MV-SAM's 51.0% with 12 click prompts (+11.4 points). Cross-dataset transfer reveals the biggest gap: TrianguLang trained on ScanNet++ scores <b>75.7% mIoU</b> on uCO3D, more than doubling MV-SAM's 32.2%. On LERF-OVS, TrianguLang closely matches LangSplat-V2 on segmentation (59.2% vs. 59.9% mIoU) and <b>surpasses every method on localization accuracy</b> (89.1%, +5.0 over LangSplat-V2), while running <b>three orders of magnitude faster</b> (~58ms vs. 10-45 minutes of per-scene optimization).
+          </p>
+          <p>
+            Mask selection is not a bottleneck. Comparing predicted masks against an oracle that always picks the ground-truth-best candidate, TrianguLang loses just <b>1 point</b> (63.4% &rarr; 62.4%), whereas SAM3 loses <b>30 points</b> (79.9% &rarr; 49.8%) because it generates hundreds of candidates per scene and cannot reliably rank them. Despite a much higher oracle ceiling, SAM3 ends up 12.6 points below TrianguLang in practice.
           </p>
         </div>
 
@@ -396,8 +394,8 @@
               </tr>
               <tr style="background: #f0f7ff; font-weight: 600;">
                 <td><b>TrianguLang</b> (zero-shot)</td>
-                <td style="text-align: right;"><b>58.1</b></td>
-                <td style="text-align: right;">83.5</td>
+                <td style="text-align: right;">59.2</td>
+                <td style="text-align: right;"><b>89.1</b></td>
                 <td style="text-align: center;">No</td>
                 <td style="text-align: right;"><b>~58ms</b></td>
               </tr>
@@ -405,9 +403,169 @@
           </table>
         </div>
 
+        <h3 class="title is-5" style="margin-top: 2.5rem;">Open-Vocabulary Generalization</h3>
         <div class="content has-text-justified">
           <p>
-            Each component matters. Removing the GASA kernel drops mIoU by 5.3 points; removing world-space PE drops it by 5.4. Swapping the learned distance kernel for a fixed RBF costs 10.7 points. The model runs at ~57ms per frame (1008x1008, single A100), while per-scene methods require 30-60 minutes per new scene.
+            The same ScanNet++-trained model transfers zero-shot to four open-vocabulary benchmarks using raw text queries and no per-scene optimization, including object-centric, tabletop, and unbounded outdoor scenes that look nothing like its indoor training data.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Method</th>
+                <th style="color: white; text-align: right;">uCO3D</th>
+                <th style="color: white; text-align: right;">LERF-OVS</th>
+                <th style="color: white; text-align: right;">3D-OVS</th>
+                <th style="color: white; text-align: right;">Mip-NeRF360</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td><b>TrianguLang</b> (zero-shot)</td>
+                <td style="text-align: right;"><b>86.0</b></td>
+                <td style="text-align: right;"><b>82.4</b></td>
+                <td style="text-align: right;"><b>94.1</b></td>
+                <td style="text-align: right;"><b>79.1</b></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+            Scene mIoU (%) from the ScanNet++-trained model, raw text queries, no per-scene optimization.
+          </p>
+        </div>
+
+        <h3 class="title is-5" style="margin-top: 2.5rem;">3D Open-Vocabulary Segmentation</h3>
+        <div class="content has-text-justified">
+          <p>
+            Evaluating directly in 3D rather than on 2D masks, we lift per-frame predictions onto the ScanNet++ laser-scan mesh and score per-vertex semantic IoU. TrianguLang reaches <b>27.9% f-mIoU</b>, on par with SceneSplat (28.4%), the strongest generalizable language-Gaussian method, and far above per-scene methods. The difference is what each method needs as input: TrianguLang requires neither per-scene optimization nor a Gaussian reconstruction.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Method</th>
+                <th style="color: white; text-align: right;">f-mIoU</th>
+                <th style="color: white; text-align: center;">Per-scene Opt.</th>
+                <th style="color: white; text-align: center;">Needs 3DGS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LangSplat</td>
+                <td style="text-align: right;">1.3</td>
+                <td style="text-align: center;">Yes</td>
+                <td style="text-align: center;">Yes</td>
+              </tr>
+              <tr>
+                <td>Feature-3DGS</td>
+                <td style="text-align: right;">8.0</td>
+                <td style="text-align: center;">Yes</td>
+                <td style="text-align: center;">Yes</td>
+              </tr>
+              <tr>
+                <td>SceneSplat</td>
+                <td style="text-align: right;"><b>28.4</b></td>
+                <td style="text-align: center;">No</td>
+                <td style="text-align: center;">Yes</td>
+              </tr>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td><b>TrianguLang</b></td>
+                <td style="text-align: right;">27.9</td>
+                <td style="text-align: center;">No</td>
+                <td style="text-align: center;"><b>No</b></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+            Foreground per-vertex f-mIoU (%) on ScanNet++, excluding wall/floor/ceiling. SceneSplat and ours use the full ~50-scene validation set; LangSplat and Feature-3DGS are the 10-scene mini-val as benchmarked by SceneSplat++.
+          </p>
+        </div>
+
+        <h3 class="title is-5" style="margin-top: 2.5rem;">Ablations</h3>
+        <div class="content has-text-justified">
+          <p>
+            Each component matters. Removing the GASA kernel drops mIoU by 5.3 points; removing world-space PE drops it by 5.4. Removing both costs 8.4 points, less than the sum of the two, so the components carry partly overlapping geometric information. Swapping the learned distance kernel for a fixed RBF costs 10.7 points. The model runs at ~58ms per frame (1008&times;1008, single A100), while per-scene methods require 30-60 minutes per new scene.
+          </p>
+          <p>
+            Against alternative geometric encodings under a matched GASA recipe, our world-frame 3D PE is comparable to Pl&uuml;cker coordinates and clearly ahead of the relative-camera encodings PRoPE and RayRoPE, which inject intrinsics and extrinsics into attention.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Positional Encoding</th>
+                <th style="color: white; text-align: right;">mIoU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: #f0f7ff; font-weight: 600;">
+                <td><b>World-frame 3D PE (ours)</b></td>
+                <td style="text-align: right;"><b>41.4</b></td>
+              </tr>
+              <tr>
+                <td>Pl&uuml;cker</td>
+                <td style="text-align: right;">40.2</td>
+              </tr>
+              <tr>
+                <td>PRoPE</td>
+                <td style="text-align: right;">36.8</td>
+              </tr>
+              <tr>
+                <td>RayRoPE</td>
+                <td style="text-align: right;">23.0</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+            Held-out ScanNet++ (50 scenes, 8 views, 504 resolution), all using the GASA decoder.
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            GASA derives its 3D pointmaps from a frozen visual geometry model, and it is not tied to a particular one. Swapping the backbone while keeping the decoder fixed changes in-domain accuracy by less than a point; the cross-domain benchmarks are where a weaker depth model shows.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; margin: 2rem 0;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #363636; color: white;">
+                <th style="color: white;">Geometry Backbone</th>
+                <th style="color: white; text-align: right;">ScanNet++</th>
+                <th style="color: white; text-align: right;">uCO3D</th>
+                <th style="color: white; text-align: right;">LERF-OVS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>DA3-NESTED</td>
+                <td style="text-align: right;">62.4</td>
+                <td style="text-align: right;"><b>72.1</b></td>
+                <td style="text-align: right;"><b>59.2</b></td>
+              </tr>
+              <tr>
+                <td>MapAnything</td>
+                <td style="text-align: right;"><b>63.0</b></td>
+                <td style="text-align: right;"><b>72.1</b></td>
+                <td style="text-align: right;">58.1</td>
+              </tr>
+              <tr>
+                <td>&pi;<sup>3</sup>-VO</td>
+                <td style="text-align: right;">62.7</td>
+                <td style="text-align: right;">66.8</td>
+                <td style="text-align: right;">51.8</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+            mIoU (%), same GASA decoder trained on ScanNet++ and evaluated zero-shot on uCO3D and LERF-OVS. Headline numbers reported elsewhere on this page use the DA3-NESTED backbone.
           </p>
         </div>
       </div>
@@ -418,9 +576,9 @@
       <div class="column is-four-fifths">
 
         <div class="figure-constrained">
-          <img src="static/images/grid_scannet.png" alt="Segmentation results on ScanNet++" style="width: 100%; height: auto; border-radius: 10px;">
+          <img src="static/images/sidebyside_scannetpp_uco3d.png" alt="Segmentation results on ScanNet++ and uCO3D" style="width: 100%; height: auto; border-radius: 10px;">
           <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
-            Text-guided segmentation on ScanNet++. Left-to-right: RGB input, DA3 depth, ground truth, TrianguLang prediction.
+            Text-guided segmentation on ScanNet++ (left) and uCO3D (right). Each row, left-to-right: RGB input, predicted depth, ground truth, TrianguLang prediction, overlay.
           </p>
         </div>
 
@@ -432,16 +590,16 @@
         </div>
 
         <div class="figure-constrained">
-          <img src="static/images/grid_uco3d.png" alt="Segmentation results on uCO3D" style="width: 100%; height: auto; border-radius: 10px;">
+          <img src="static/images/sidebyside_mipnerf_3dovs.png" alt="Zero-shot open-vocabulary segmentation on Mip-NeRF360 and 3D-OVS" style="width: 100%; height: auto; border-radius: 10px;">
           <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
-            Cross-dataset transfer on uCO3D (75.7% mIoU, more than doubling MV-SAM's 32.2%).
+            Zero-shot open-vocabulary segmentation on Mip-NeRF360 (left) and 3D-OVS (right), from the ScanNet++-trained model with raw text queries and no per-scene optimization.
           </p>
         </div>
 
         <div class="figure-constrained">
           <img src="static/images/grid_spinnerf.jpg" alt="Segmentation results on SPIn-NeRF" style="width: 100%; height: auto; border-radius: 10px;">
           <p class="has-text-centered" style="margin-top: 0.75rem; font-size: 0.9rem; color: #555;">
-            Segmentation on SPIn-NeRF (90.7% mean IoU). TrianguLang produces view-consistent masks using only text prompts.
+            Segmentation on SPIn-NeRF (91.4% mean IoU). TrianguLang produces view-consistent masks using only text prompts.
           </p>
         </div>
 
