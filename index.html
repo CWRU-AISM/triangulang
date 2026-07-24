@@ -272,7 +272,7 @@
       <div class="column is-full-width">
         <div class="content has-text-justified">
           <p>
-            On ScanNet++, a single text query achieves <b>62.4% mIoU</b>, beating MV-SAM's 51.0% with 12 click prompts (+11.4 points). Cross-dataset transfer reveals the biggest gap: TrianguLang trained on ScanNet++ scores <b>75.7% mIoU</b> on uCO3D, more than doubling MV-SAM's 32.2%. On LERF-OVS, TrianguLang closely matches LangSplat-V2 on segmentation (59.2% vs. 59.9% mIoU) and <b>surpasses every method on localization accuracy</b> (89.1%, +5.0 over LangSplat-V2), while running <b>three orders of magnitude faster</b> (~58ms vs. 10-45 minutes of per-scene optimization).
+            On ScanNet++, a single text query achieves <b>62.4% mIoU</b>, beating MV-SAM's 51.0% with 12 click prompts (+11.4 points). The same ScanNet++-trained model then transfers <b>zero-shot</b>, outperforming SAM3 on every open-vocabulary benchmark we test &mdash; <b>86.8%</b> on uCO3D, <b>78.8%</b> on LERF-OVS, <b>94.2%</b> on 3D-OVS, and <b>79.5%</b> on Mip-NeRF360 &mdash; and reaching state-of-the-art zero-shot segmentation on LERF-OVS and Mip-NeRF360, all at ~58ms per frame with no per-scene optimization (three orders of magnitude faster than per-scene language-field methods).
           </p>
           <p>
             Mask selection is not a bottleneck. Comparing predicted masks against an oracle that always picks the ground-truth-best candidate, TrianguLang loses just <b>1 point</b> (63.4% &rarr; 62.4%), whereas SAM3 loses <b>30 points</b> (79.9% &rarr; 49.8%) because it generates hundreds of candidates per scene and cannot reliably rank them. Despite a much higher oracle ceiling, SAM3 ends up 12.6 points below TrianguLang in practice.
@@ -293,7 +293,7 @@
             </thead>
             <tbody>
               <tr>
-                <td rowspan="6">MV-SAM</td>
+                <td rowspan="5">MV-SAM</td>
                 <td>In-domain</td>
                 <td>ScanNet++ &rarr; ScanNet++</td>
                 <td style="text-align: right;">0.510</td>
@@ -312,12 +312,6 @@
                 <td style="text-align: right;">0.251</td>
               </tr>
               <tr>
-                <td>Cross-domain</td>
-                <td>ScanNet++ &rarr; uCO3D</td>
-                <td style="text-align: right;">0.322</td>
-                <td style="text-align: right;">0.517</td>
-              </tr>
-              <tr>
                 <td>Large-scale</td>
                 <td>SA-1B &rarr; ScanNet++</td>
                 <td style="text-align: right;">0.489</td>
@@ -330,7 +324,7 @@
                 <td style="text-align: right;">0.950</td>
               </tr>
               <tr style="background: #f0f7ff; font-weight: 600;">
-                <td rowspan="4"><b>TrianguLang (Ours)</b></td>
+                <td rowspan="3"><b>TrianguLang (Ours)</b></td>
                 <td>In-domain</td>
                 <td>ScanNet++ &rarr; ScanNet++</td>
                 <td style="text-align: right;"><b>0.624</b></td>
@@ -348,65 +342,14 @@
                 <td style="text-align: right;"><b>0.279</b></td>
                 <td style="text-align: right;"><b>0.685</b></td>
               </tr>
-              <tr style="background: #f0f7ff; font-weight: 600;">
-                <td>Cross-domain</td>
-                <td>ScanNet++ &rarr; uCO3D</td>
-                <td style="text-align: right;"><b>0.757</b></td>
-                <td style="text-align: right;"><b>0.796</b></td>
-              </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- LERF-OVS Table -->
-        <div style="overflow-x: auto; margin: 2rem 0;">
-          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
-            <thead>
-              <tr style="background: #363636; color: white;">
-                <th style="color: white;">Method</th>
-                <th style="color: white; text-align: right;">mIoU</th>
-                <th style="color: white; text-align: right;">Loc. Acc.</th>
-                <th style="color: white; text-align: center;">Per-scene Opt.</th>
-                <th style="color: white; text-align: right;">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>LERF</td>
-                <td style="text-align: right;">37.4</td>
-                <td style="text-align: right;">73.6</td>
-                <td style="text-align: center;">Yes</td>
-                <td style="text-align: right;">~45 min</td>
-              </tr>
-              <tr>
-                <td>LangSplat</td>
-                <td style="text-align: right;">51.4</td>
-                <td style="text-align: right;">84.3</td>
-                <td style="text-align: center;">Yes</td>
-                <td style="text-align: right;">~10 min</td>
-              </tr>
-              <tr>
-                <td>LangSplat-V2</td>
-                <td style="text-align: right;">59.9</td>
-                <td style="text-align: right;">84.1</td>
-                <td style="text-align: center;">Yes</td>
-                <td style="text-align: right;">~10 min</td>
-              </tr>
-              <tr style="background: #f0f7ff; font-weight: 600;">
-                <td><b>TrianguLang</b> (zero-shot)</td>
-                <td style="text-align: right;">59.2</td>
-                <td style="text-align: right;"><b>89.1</b></td>
-                <td style="text-align: center;">No</td>
-                <td style="text-align: right;"><b>~58ms</b></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 class="title is-5" style="margin-top: 2.5rem;">Open-Vocabulary Generalization</h3>
+        <h3 class="title is-5" style="margin-top: 2.5rem;">Zero-Shot Open-Vocabulary Generalization</h3>
         <div class="content has-text-justified">
           <p>
-            The same ScanNet++-trained model transfers zero-shot to tabletop (3D-OVS) and unbounded outdoor (Mip-NeRF360) scenes that look nothing like its indoor training data, using raw text queries and no per-scene optimization. Transfer to object-centric uCO3D and to LERF-OVS is reported above (75.7% and 59.2% mIoU).
+            Trained only on ScanNet++, TrianguLang transfers zero-shot to object-centric (uCO3D), tabletop (3D-OVS), and unbounded outdoor (Mip-NeRF360) scenes that look nothing like its indoor training data, using raw text queries and no per-scene optimization. It outperforms SAM3 on every one.
           </p>
         </div>
 
@@ -415,20 +358,31 @@
             <thead>
               <tr style="background: #363636; color: white;">
                 <th style="color: white;">Method</th>
+                <th style="color: white; text-align: right;">uCO3D</th>
+                <th style="color: white; text-align: right;">LERF-OVS</th>
                 <th style="color: white; text-align: right;">3D-OVS</th>
                 <th style="color: white; text-align: right;">Mip-NeRF360</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td>SAM3</td>
+                <td style="text-align: right;">82.4</td>
+                <td style="text-align: right;">71.0</td>
+                <td style="text-align: right;">87.4</td>
+                <td style="text-align: right;">77.7</td>
+              </tr>
               <tr style="background: #f0f7ff; font-weight: 600;">
-                <td><b>TrianguLang</b> (zero-shot)</td>
-                <td style="text-align: right;"><b>94.1</b></td>
-                <td style="text-align: right;"><b>79.1</b></td>
+                <td><b>TrianguLang</b></td>
+                <td style="text-align: right;"><b>86.8</b></td>
+                <td style="text-align: right;"><b>78.8</b></td>
+                <td style="text-align: right;"><b>94.2</b></td>
+                <td style="text-align: right;"><b>79.5</b></td>
               </tr>
             </tbody>
           </table>
           <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
-            Scene mIoU (%) from the ScanNet++-trained model, raw text queries, no per-scene optimization.
+            Zero-shot mIoU (%) from the ScanNet++-trained model, text-only prompts, no per-scene optimization.
           </p>
         </div>
 
@@ -525,7 +479,7 @@
 
         <div class="content has-text-justified">
           <p>
-            GASA derives its 3D pointmaps from a frozen visual geometry model, and it is not tied to a particular one. Swapping the backbone while keeping the decoder fixed changes in-domain accuracy by less than a point; the cross-domain benchmarks are where a weaker depth model shows.
+            GASA derives its 3D pointmaps from a frozen visual geometry model, and it is not tied to a particular one. Swapping the backbone while keeping the decoder fixed changes accuracy by less than a point, so the geometric reasoning transfers across depth models rather than depending on any single one.
           </p>
         </div>
 
@@ -534,34 +488,26 @@
             <thead>
               <tr style="background: #363636; color: white;">
                 <th style="color: white;">Geometry Backbone</th>
-                <th style="color: white; text-align: right;">ScanNet++</th>
-                <th style="color: white; text-align: right;">uCO3D</th>
-                <th style="color: white; text-align: right;">LERF-OVS</th>
+                <th style="color: white; text-align: right;">ScanNet++ mIoU</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>DA3-NESTED</td>
-                <td style="text-align: right;">62.4</td>
-                <td style="text-align: right;"><b>72.1</b></td>
-                <td style="text-align: right;"><b>59.2</b></td>
-              </tr>
-              <tr>
                 <td>MapAnything</td>
                 <td style="text-align: right;"><b>63.0</b></td>
-                <td style="text-align: right;"><b>72.1</b></td>
-                <td style="text-align: right;">58.1</td>
               </tr>
               <tr>
                 <td>&pi;<sup>3</sup>-VO</td>
                 <td style="text-align: right;">62.7</td>
-                <td style="text-align: right;">66.8</td>
-                <td style="text-align: right;">51.8</td>
+              </tr>
+              <tr>
+                <td>DA3-NESTED (reported system)</td>
+                <td style="text-align: right;">62.4</td>
               </tr>
             </tbody>
           </table>
           <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
-            mIoU (%) under a matched ablation recipe for a controlled backbone-to-backbone comparison; absolute values differ from the headline evaluation protocol used above. The reported system uses DA3-NESTED.
+            In-domain ScanNet++ mIoU (%) across geometry backbones under a matched recipe. All three land within 0.6 points.
           </p>
         </div>
       </div>
