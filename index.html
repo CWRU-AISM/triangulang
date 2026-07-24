@@ -406,7 +406,7 @@
         <h3 class="title is-5" style="margin-top: 2.5rem;">Open-Vocabulary Generalization</h3>
         <div class="content has-text-justified">
           <p>
-            The same ScanNet++-trained model transfers zero-shot to four open-vocabulary benchmarks using raw text queries and no per-scene optimization, including object-centric, tabletop, and unbounded outdoor scenes that look nothing like its indoor training data.
+            The same ScanNet++-trained model transfers zero-shot to tabletop (3D-OVS) and unbounded outdoor (Mip-NeRF360) scenes that look nothing like its indoor training data, using raw text queries and no per-scene optimization. Transfer to object-centric uCO3D and to LERF-OVS is reported above (75.7% and 59.2% mIoU).
           </p>
         </div>
 
@@ -415,8 +415,6 @@
             <thead>
               <tr style="background: #363636; color: white;">
                 <th style="color: white;">Method</th>
-                <th style="color: white; text-align: right;">uCO3D</th>
-                <th style="color: white; text-align: right;">LERF-OVS</th>
                 <th style="color: white; text-align: right;">3D-OVS</th>
                 <th style="color: white; text-align: right;">Mip-NeRF360</th>
               </tr>
@@ -424,8 +422,6 @@
             <tbody>
               <tr style="background: #f0f7ff; font-weight: 600;">
                 <td><b>TrianguLang</b> (zero-shot)</td>
-                <td style="text-align: right;"><b>86.0</b></td>
-                <td style="text-align: right;"><b>82.4</b></td>
                 <td style="text-align: right;"><b>94.1</b></td>
                 <td style="text-align: right;"><b>79.1</b></td>
               </tr>
@@ -565,7 +561,7 @@
             </tbody>
           </table>
           <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
-            mIoU (%), same GASA decoder trained on ScanNet++ and evaluated zero-shot on uCO3D and LERF-OVS. Headline numbers reported elsewhere on this page use the DA3-NESTED backbone.
+            mIoU (%) under a matched ablation recipe for a controlled backbone-to-backbone comparison; absolute values differ from the headline evaluation protocol used above. The reported system uses DA3-NESTED.
           </p>
         </div>
       </div>
